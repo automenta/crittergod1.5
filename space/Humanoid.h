@@ -9,272 +9,263 @@
 #define HUMANOID_H_
 
 #include "AbstractBody.h"
+
+#include "../bio/Retina.h"
+#include "../bio/SixDoFMotor.h"
 #include "../neural/Brain.h"
 
 class Humanoid : public AbstractBody {
-	Brain* brain;
+    float m_fMuscleStrength;
 
-	float m_fMuscleStrength;
+    btVector3 positionOffset;
 
-	unsigned parts;
-
-	btVector3 positionOffset;
+    SixDoFMotor *neckMotor;
+    SixDoFMotor *leftShoulderMotor, *rightShoulderMotor;
+    SixDoFMotor *leftElbowMotor, *rightElbowMotor;
 
 public:
-	Humanoid(const btVector3& _positionOffset,	unsigned _parts)  {
-		parts = _parts;
-		positionOffset = _positionOffset;
-	}
+    Retina* eyeRetina;
+    Retina* lhRetina;
+    Retina* rhRetina;
+    Brain* brain;
 
-	virtual void init() {
+    Humanoid(const btVector3& _positionOffset) {
+        positionOffset = _positionOffset;
+    }
 
-		btVector3 vUp(0, 1, 0);
-		m_fMuscleStrength = 0.5f;
+    virtual void init() {
+        btVector3 vUp(0, 1, 0);
+        m_fMuscleStrength = 0.5f;
 
-		shapes.reserve(parts);
-		bodies.reserve(parts);
-		joints.reserve(parts-1);
 
-		//
-		// Setup geometry
-		//
-		float fBodySize = 0.15f;
-		float fPartLength = 0.45f;
-		unsigned i;
-		for (i = 0; i < parts; i++) {
-			shapes.push_back(new btCapsuleShape(btScalar(fBodySize), btScalar(fPartLength)));
-		}
+        int numNeurons = 16384;
+        int minSynapses = 1;
+        int maxSynapses = 8;
 
-		int numNeurons = 1024;
-		int minSynapses = 1;
-		int maxSynapses = 16;
+        brain = new Brain(numNeurons, minSynapses, maxSynapses, 0.5);
 
-		brain = new Brain(1 * 3 * parts, parts - 1, numNeurons,
-				minSynapses, maxSynapses, 0.5);
+        //
+        // Setup geometry
+        //
+        btTransform t;
+        t.setIdentity();
 
-		brain->printSummary();
+        btRigidBody* torso = createRigidShape(62.0, t, new btBoxShape(btVector3(0.5, 1.0, 1.0)));
 
-		//
-		// Setup rigid bodies
-		//
-		float fHeight = 0.5;
-		btTransform offset;
-		offset.setIdentity();
-		offset.setOrigin(positionOffset);
+        t.setIdentity();
+        t.setOrigin(positionOffset);
+        btRigidBody* head = createRigidShape(3.0, t, new btBoxShape(btVector3(0.3, 0.3, 0.4)));
 
-		// root
-		btVector3 vRoot = btVector3(btScalar(0.), btScalar(fHeight), btScalar(0.));
-		btTransform transform;
-		transform.setIdentity();
-		transform.setOrigin(vRoot);
-		//m_bodies[0] = localCreateRigidBody(btScalar(1.), offset * transform,m_shapes[0]);
 
-		for (i = 0; i < parts; i++) {
-			float fAngle = 2 * M_PI * i / parts;
-			float fSin = sin(fAngle);
-			float fCos = cos(fAngle);
+        btRigidBody* eye = createRigidShape(1.0, t, new btBoxShape(btVector3(0.05, 0.2, 0.2)));
+        {
+            //eye joint: Eye to Head
 
-			transform.setIdentity();
-			transform.setOrigin(btVector3(0,i,0));
-			//			btVector3 vBoneOrigin = btVector3(btScalar(fCos * (fBodySize + 0.5
-			//					* fPartLength)), btScalar(fHeight), btScalar(fSin
-			//					* (fBodySize + 0.5 * fPartLength)));
-			//			transform.setOrigin(vBoneOrigin);
-			//
-			//			transform.setIdentity();
-			//			transform.setOrigin(btVector3(btScalar(fCos * (fBodySize
-			//					+ fPartLength)), btScalar(fHeight - 0.5 * fPartLength),
-			//					btScalar(fSin * (fBodySize + fPartLength))));
-			bodies[i] = localCreateRigidBody(btScalar(1.),	offset * transform, shapes[i]);
+            btTransform localA, localB;
 
-			//			for (unsigned j = 0; j < legParts; j++) {
-			//				if (j == 0) {
-			//					// thigh
-			//					btVector3 vToBone = (vBoneOrigin - vRoot).normalize();
-			//					btVector3 vAxis = vToBone.cross(vUp);
-			//					transform.setRotation(btQuaternion(vAxis, M_PI_2));
-			//					m_bodies[1 + j + legParts * i] = localCreateRigidBody(
-			//							btScalar(1.), offset * transform, m_shapes[1 + 2
-			//									* i]);
-			//				} else if (j == 1) {
-			//					// shin
-			//					transform.setIdentity();
-			//					transform.setOrigin(btVector3(btScalar(fCos * (fBodySize
-			//							+ fLegLength)), btScalar(fHeight - 0.5
-			//							* fForeLegLength), btScalar(fSin * (fBodySize
-			//							+ fLegLength))));
-			//					m_bodies[1 + j + legParts * i] = localCreateRigidBody(
-			//							btScalar(1.), offset * transform, m_shapes[2 + 2
-			//									* i]);
-			//				}
-			//			}
+            localA.setIdentity();
+            localA.setOrigin(btVector3(-0.2, 0, 0));
+            localB.setIdentity();
+            localB.setOrigin(btVector3(0.2, 0, 0));
 
-		}
+            btGeneric6DofConstraint* c = new btGeneric6DofConstraint(*eye, *head, localA, localB, false);
 
-		// Setup some damping on the m_bodies
-		for (i = 0; i < parts; ++i) {
-			bodies[i]->setDamping(0.05, 0.85);
-			bodies[i]->setDeactivationTime(0.8);
-			//m_bodies[i]->setSleepingThresholds(1.6, 2.5);
-			bodies[i]->setSleepingThresholds(0.5f, 0.5f);
-		}
+            c->setAngularLowerLimit(btVector3(0, 0, 0));
+            c->setAngularUpperLimit(btVector3(0, 0, 0));
 
-		//
-		// Setup the constraints
-		//
-		//btGeneric6DoFConstraint* hingeC;
-		//btConeTwistConstraint* coneC;
+            createJoint(c);
 
-		btTransform localA, localB, localC;
+        }
 
-		unsigned joint = 0;
-		for (i = 0; i < parts - 1; i++) {
-			float fAngle = 2 * M_PI * i / parts;
-			float fSin = sin(fAngle);
-			float fCos = cos(fAngle);
+        eyeRetina = new Retina(brain, space->dynamicsWorld, eye, 32, 24, 3);
 
-			//connect legPart[j-1] to legPart[j]
+        {
+            //neck joint: torso->head
 
-			//						localA.setIdentity(); localB.setIdentity();
-			//						localA.getBasis().setEulerZYX(0,-fAngle,0);
-			//						localA.setOrigin(btVector3(btScalar(fCos*fBodySize), btScalar(0.), btScalar(fSin*fBodySize)));
-			//						localB = m_bodies[i]->getWorldTransform().inverse() * m_bodies[i+1]->getWorldTransform() * localA;
-			//						hingeC->setLimit(btScalar(0), btScalar(0.15));
+            double neckLength = 1.5;
 
-			double headroomFactor = 1.5;
+            btTransform localA, localB;
 
-			localA.setIdentity();
-			localA.setOrigin(btVector3(0, (fPartLength / 2) * headroomFactor,
-					0));
-			localB.setIdentity();
-			localB.setOrigin(
-					btVector3(0, -(fPartLength / 2) * headroomFactor, 0));
+            localA.setIdentity();
+            localA.setOrigin(btVector3(0, (neckLength / 2), 0));
+            localB.setIdentity();
+            localB.setOrigin(btVector3(0, -(neckLength / 2), 0));
 
-			btGeneric6DofConstraint* c = new btGeneric6DofConstraint(
-					*bodies[i], *bodies[i + 1], localA, localB, false);
+            btGeneric6DofConstraint* c = new btGeneric6DofConstraint(*torso, *head, localA, localB, false);
 
-			c->setAngularLowerLimit(btVector3(-M_PI_4, -M_PI_4, -M_PI_4));
-			c->setAngularUpperLimit(btVector3(M_PI_4, M_PI_4, M_PI_4));
+            float sideToSideTilt = M_PI_8;
+            float sideToSideRoll = M_PI_8;
+            float forwardTilt = M_PI_8;
+            c->setAngularLowerLimit(btVector3(-sideToSideTilt, sideToSideRoll, -forwardTilt));
+            c->setAngularUpperLimit(btVector3(sideToSideTilt, sideToSideRoll, forwardTilt));
 
-			joints[joint++] = c;
-			dyn->addConstraint(c);
+            createJoint(c);
 
-			//			// hip joints
-			//			localA.setIdentity(); localB.setIdentity();
-			//			localA.getBasis().setEulerZYX(0,-fAngle,0);	localA.setOrigin(btVector3(btScalar(fCos*fBodySize), btScalar(0.), btScalar(fSin*fBodySize)));
-			//			localB = m_bodies[1+2*i]->getWorldTransform().inverse() * m_bodies[0]->getWorldTransform() * localA;
-			//			hingeC = new btGeneric6DoFConstraint(*m_bodies[0], *m_bodies[1+2*i], localA, localB);
-			//			hingeC->setLimit(btScalar(-0.75 * M_PI_4), btScalar(M_PI_8));
-			//			//hingeC->setLimit(btScalar(0), btScalar(M_PI));
-			//			//hingeC->setLimit(btScalar(-0.1), btScalar(0.1));
-			//			m_joints[2*i] = hingeC;
-			//			m_ownerWorld->addConstraint(m_joints[2*i], true);
-			//
-			//			// knee joints
-			//			localA.setIdentity(); localB.setIdentity(); localC.setIdentity();
-			//			localA.getBasis().setEulerZYX(0,-fAngle,0);	localA.setOrigin(btVector3(btScalar(fCos*(fBodySize+fLegLength)), btScalar(0.), btScalar(fSin*(fBodySize+fLegLength))));
-			//			localB = m_bodies[1+2*i]->getWorldTransform().inverse() * m_bodies[0]->getWorldTransform() * localA;
-			//			localC = m_bodies[2+2*i]->getWorldTransform().inverse() * m_bodies[0]->getWorldTransform() * localA;
-			//			hingeC = new btGeneric6DoFConstraint(*m_bodies[1+2*i], *m_bodies[2+2*i], localB, localC);
-			//			hingeC->setLimit(btScalar(0), btScalar(0.15));
-			//			//hingeC->setLimit(btScalar(0), btScalar(M_PI));
-			//			m_joints[1+2*i] = hingeC;
-			//			m_ownerWorld->addConstraint(m_joints[1+2*i], true);
-		}
+            neckMotor = new SixDoFMotor(brain, c);
+        }
 
-	}
 
-//	//sinusoidal gps filter
-//	float sinGPS(int harmonic, float x) {
-//		return sin(x * SPACE_FREQ * pow(2, harmonic)) / ((float) harmonic);
-//	}
+        {
+            float sideToSideTilt = M_PI_8;
+            float sideToSideRoll = M_PI_8;
+            float forwardTilt = M_PI_8;
 
-	virtual btVector3 getColor(btCollisionShape* shape) {
-		float i = (float)(indexOfShape(shape)%2);
-		return btVector3(0.3+i*0.5, 0.8+ i*0.2, 0.4);
-	}
+            double backArmLength = 0.6;
+            double backArmWidth = 0.2;
+            double foreArmLength = 0.4;
+            double foreArmWidth = 0.15;
 
-	virtual void process(btScalar dt) {
-//		//apply inputs
-//		unsigned i = 0;
-//		for (unsigned h = 0; h < GPS_HARMONICS; h++) {
-//			for (unsigned s = 0; s < parts; s++) {
-//				btRigidBody* m = bodies[s];
-//				brain->ins[i++]->setInput(sinGPS(h,
-//						m->getCenterOfMassPosition().getX()));
-//				brain->ins[i++]->setInput(sinGPS(h,
-//						m->getCenterOfMassPosition().getY()));
-//				brain->ins[i++]->setInput(sinGPS(h,
-//						m->getCenterOfMassPosition().getZ()));
-//			}
-//		}
-//
-//		//process brain
-//		brain->forward(1.0);
-//
-//		btVector3 v;
-//
-//		//read outputs
-//		for (unsigned i = 0; i < parts - 1; i++) {
-//			btGeneric6DofConstraint* c = static_cast<btGeneric6DofConstraint*> (joints[i]);
-//
-//			double scale = 0.005;
-//			float xmax = (getLegTargetAngle(i))*scale;
-//			float xmin = xmax * 0.5;
-//
-//			//cout << xmin << " " << xmax << "\n";
-//
-//			c->getTranslationalLimitMotor()->m_lowerLimit.setX(xmin);
-//			c->getTranslationalLimitMotor()->m_upperLimit.setX(xmax);
-//
-//			//
-//			//			btVector3 v(xmin, 0, 0);
-//			//			c->setLinearLowerLimit(v);
-//			//
-//			//			btVector3 w(xmax, 0, 0);
-//			//			c->setLinearUpperLimit(w);
-//
-//			//			btScalar fCurAngle = hingeC->getHingeAngle();
-//			//
-//			//			btScalar fTargetAngle = (1.0 + getLegTargetAngle(i)) * 2.0; //0.5 * (1 + sin(2 * M_PI * fTargetPercent));
-//			//
-//			//			btScalar fTargetLimitAngle = hingeC->getLowerLimit() + fTargetAngle
-//			//					* (hingeC->getUpperLimit() - hingeC->getLowerLimit());
-//			//			btScalar fAngleError = fTargetLimitAngle - fCurAngle;
-//			//			btScalar fDesiredAngularVel = 1000000.f * fAngleError / dt
-//			//					* 1000000.;
-//			//			hingeC->enableAngularMotor(true, fDesiredAngularVel,
-//			//					m_fMuscleStrength);
-//		}
+            //left arm
+            btRigidBody* leftBackArm = createRigidShape(2.0, t, new btBoxShape(btVector3(backArmLength, backArmWidth, backArmWidth)));
+            btRigidBody* rightBackArm = createRigidShape(2.0, t, new btBoxShape(btVector3(backArmLength, backArmWidth, backArmWidth)));
 
-	}
+            btTransform localA, localB;
 
-	btScalar getLegTargetAngle(int part) {
-		return brain->outs[part]->getOutput();
-	}
+            {
 
-	virtual ~Humanoid() {
-		int i;
+                localA.setIdentity();
+                localA.setOrigin(btVector3(0, 0, 1.5));
+                localB.setIdentity();
+                localB.setOrigin(btVector3(-backArmLength / 2.0, 0, backArmWidth / 2.0));
 
-		// Remove all constraints
-		for (i = 0; i < parts - 1; ++i) {
-			dyn->removeConstraint(joints[i]);
-			delete joints[i];
-			joints[i] = 0;
-		}
+                btGeneric6DofConstraint* c = new btGeneric6DofConstraint(*torso, *leftBackArm, localA, localB, false);
 
-		// Remove all bodies and shapes
-		for (i = 0; i < parts; ++i) {
-			dyn->removeRigidBody(bodies[i]);
+                float sideToSideTilt = M_PI_8;
+                float sideToSideRoll = M_PI_8;
+                float forwardTilt = M_PI_8;
+                c->setAngularLowerLimit(btVector3(-sideToSideTilt, sideToSideRoll, -forwardTilt));
+                c->setAngularUpperLimit(btVector3(sideToSideTilt, sideToSideRoll, forwardTilt));
 
-			delete bodies[i]->getMotionState();
+                createJoint(c);
+                leftShoulderMotor = new SixDoFMotor(brain, c);
+            }
+            {
 
-			delete bodies[i];
-			bodies[i] = 0;
-			delete shapes[i];
-			shapes[i] = 0;
-		}
-	}
+                localA.setIdentity();
+                localA.setOrigin(btVector3(0, 0, -1.5));
+                localB.setIdentity();
+                localB.setOrigin(btVector3(-backArmLength / 2.0, 0, backArmWidth / 2.0));
+
+                btGeneric6DofConstraint* c = new btGeneric6DofConstraint(*torso, *rightBackArm, localA, localB, false);
+
+                c->setAngularLowerLimit(btVector3(-sideToSideTilt, sideToSideRoll, -forwardTilt));
+                c->setAngularUpperLimit(btVector3(sideToSideTilt, sideToSideRoll, forwardTilt));
+
+                createJoint(c);
+                rightShoulderMotor = new SixDoFMotor(brain, c);
+            }
+
+
+
+            //forearm
+            btRigidBody* leftForeArm = createRigidShape(1.0, t, new btBoxShape(btVector3(foreArmLength, foreArmWidth, foreArmWidth)));
+            btRigidBody* rightForeArm = createRigidShape(1.0, t, new btBoxShape(btVector3(foreArmLength, foreArmWidth, foreArmWidth)));
+            {
+                localA.setIdentity();
+                localA.setOrigin(btVector3(backArmLength, 0, backArmWidth / 2.0));
+                localB.setIdentity();
+                localB.setOrigin(btVector3(-foreArmLength, 0, foreArmWidth / 2.0));
+
+                btGeneric6DofConstraint* c2 = new btGeneric6DofConstraint(*leftBackArm, *leftForeArm, localA, localB, false);
+
+                c2->setAngularLowerLimit(btVector3(0, -sideToSideTilt, 0));
+                c2->setAngularUpperLimit(btVector3(0, sideToSideTilt, 0));
+
+                createJoint(c2);
+
+                leftElbowMotor = new SixDoFMotor(brain, c2);
+
+                btRigidBody* lhEye = createRigidShape(1.0, t, new btBoxShape(btVector3(0.05, 0.2, 0.2)));
+                {
+                    //eye joint: Eye to Head
+
+                    btTransform localA, localB;
+
+                    localA.setIdentity();
+                    localA.setOrigin(btVector3(foreArmLength, 0, 0));
+                    localB.setIdentity();
+                    localB.setOrigin(btVector3(-0.2, 0, 0));
+
+                    btGeneric6DofConstraint* c = new btGeneric6DofConstraint(*leftForeArm, *lhEye, localA, localB, false);
+
+                    c->setAngularLowerLimit(btVector3(0, 0, 0));
+                    c->setAngularUpperLimit(btVector3(0, 0, 0));
+
+                    createJoint(c);
+
+                }
+
+                lhRetina = new Retina(brain, space->dynamicsWorld, lhEye, 16, 8, 7);
+
+            }
+
+            {
+                localA.setIdentity();
+                localA.setOrigin(btVector3(backArmLength, 0, -backArmWidth / 2.0));
+                localB.setIdentity();
+                localB.setOrigin(btVector3(-foreArmLength, 0, -foreArmWidth / 2.0));
+
+                btGeneric6DofConstraint* c2 = new btGeneric6DofConstraint(*rightBackArm, *rightForeArm, localA, localB, false);
+
+                c2->setAngularLowerLimit(btVector3(0, -sideToSideTilt, 0));
+                c2->setAngularUpperLimit(btVector3(0, sideToSideTilt, 0));
+
+                createJoint(c2);
+
+                rightElbowMotor = new SixDoFMotor(brain, c2);
+            }
+        }
+
+        brain->init();
+        brain->printSummary();
+
+    }
+
+    virtual btVector3 getColor(btCollisionShape* shape) {
+        float i = (float) (indexOfShape(shape) % 2);
+        return btVector3(0.3 + i * 0.5, 0.8 + i * 0.2, 0.4);
+    }
+
+    virtual void process(btScalar dt) {
+
+        //inputs
+        eyeRetina->process(dt);
+        lhRetina->process(dt);
+
+        //brain
+        brain->forward(dt);
+
+        //outputs
+        neckMotor->process(dt);
+        leftShoulderMotor->process(dt);
+        rightShoulderMotor->process(dt);
+        leftElbowMotor->process(dt);
+        rightElbowMotor->process(dt);
+
+    }
+
+    virtual ~Humanoid() {
+        unsigned i;
+
+        // Remove all constraints
+        for (i = 0; i < joints.size(); ++i) {
+            dyn->removeConstraint(joints[i]);
+            delete joints[i];
+            joints[i] = 0;
+        }
+
+        // Remove all bodies and shapes
+        for (i = 0; i < bodies.size(); ++i) {
+            dyn->removeRigidBody(bodies[i]);
+
+            delete bodies[i]->getMotionState();
+
+            delete bodies[i];
+            bodies[i] = 0;
+            delete shapes[i];
+            shapes[i] = 0;
+        }
+    }
 
 
 };

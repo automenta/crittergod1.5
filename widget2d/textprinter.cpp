@@ -140,6 +140,7 @@ void Textprinter::print(const Vector2f& pos, const string& str) {
     glDisable(GL_TEXTURE_2D);
     glDisable(GL_DEPTH_TEST);
 
+
     const char *text = str.c_str();
 
     fonts[0]->Render(text);
@@ -181,6 +182,7 @@ void Textprinter::setUpFonts() {
     const char* fontFilePath = "media/font/OCRA.ttf";
     //fonts[0] = new FTExtrudeFont(fontFilePath);
     fonts[0] = new FTPixmapFont(fontFilePath);
+    //fonts[0] = new FTPolygonFont(fontFilePath);
 
     fonts[0]->FaceSize(12);
     //fonts[0]->Depth(32);

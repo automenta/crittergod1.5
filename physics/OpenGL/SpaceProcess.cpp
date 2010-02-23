@@ -668,8 +668,7 @@ btScalar mousePickClamping = 30.f;
 
 void SpaceProcess::onMouseButton(int button, int state, int x, int y)
 {
-	if (state == 0) 
-	{
+    if (state == 0) 	{
         m_mouseButtons |= 1<<button;
     } else
 	{
@@ -694,6 +693,43 @@ void SpaceProcess::onMouseButton(int button, int state, int x, int y)
 	{
 	case 2:
 		{
+			if (state==1)
+			{
+
+
+				//add a point to point constraint for picking
+				if (dynamicsWorld)
+				{
+					
+					btVector3 rayFrom;
+					if (m_ortho)
+					{
+						rayFrom = rayTo;
+						rayFrom.setZ(-100.f);
+					} else
+					{
+						rayFrom = m_cameraPosition;
+					}
+					
+					btCollisionWorld::ClosestRayResultCallback rayCallback(rayFrom,rayTo);
+					dynamicsWorld->rayTest(rayFrom,rayTo,rayCallback);
+					if (rayCallback.hasHit())
+					{
+
+
+						btRigidBody* body = btRigidBody::upcast(rayCallback.m_collisionObject);
+						if (body)
+						{
+//                                                    void* manager = body->getUserPointer();
+//                                                    cout << "zooming to " << body << "\n";
+//                                                    m_cameraTargetPositionNext = body->getWorldTransform().getOrigin();
+//                                                    btVector3 d(0,1,0);
+//                                                    m_cameraPositionNext = m_cameraTargetPositionNext + d;
+                                                }
+                                        }
+                                }
+                        }
+        
 //			if (state==0)
 //			{
 //
@@ -777,7 +813,7 @@ void SpaceProcess::onMouseButton(int button, int state, int x, int y)
 
 
 								btVector3 pickPos = rayCallback.m_hitPointWorld;
-								printf("pickPos=%f,%f,%f\n",pickPos.getX(),pickPos.getY(),pickPos.getZ());
+								//printf("pickPos=%f,%f,%f\n",pickPos.getX(),pickPos.getY(),pickPos.getZ());
 
 
 								btVector3 localPivot = body->getCenterOfMassTransform().inverse() * pickPos;
@@ -812,6 +848,7 @@ void SpaceProcess::onMouseButton(int button, int state, int x, int y)
 					m_pickConstraint = 0;
 					pickedBody->forceActivationState(ACTIVE_TAG);
 					pickedBody->setDeactivationTime( 0.f );
+
 					pickedBody = 0;
 				}
 

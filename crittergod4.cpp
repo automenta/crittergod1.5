@@ -32,6 +32,7 @@ using namespace std;
 #include "space/AbstractBody.h"
 #include "space/SpiderBody.h"
 #include "space/SnakeBody.h"
+#include "space/Humanoid.h"
 #include "space/BoxBody.h"
 
 #include "audio/Audio.h"
@@ -129,8 +130,8 @@ void runCritterLab() {
     ds->addGround(50, 50, 5);
 
     {
-            SpiderBody* spider = new SpiderBody(3, btVector3(0, 0, 5 + 1 * 2));
-            ds->addBody(spider);
+        SpiderBody* spider = new SpiderBody(3, btVector3(0, 0, 5 + 1 * 2));
+        ds->addBody(spider);
     }
 
 
@@ -143,10 +144,10 @@ void runCritterLab() {
 
     ds->getFace()->addWidgetPanel("brainControl", new BrainPanel(b));
 
-//    BrainInsPanel bip(b, 50);
-//    ds->getFace()->addWidgetPanel("brainIns", &bip);
-//    bip.setPosition(300, 300);
-//    bip.setSize(300, 300);
+    //    BrainInsPanel bip(b, 50);
+    //    ds->getFace()->addWidgetPanel("brainIns", &bip);
+    //    bip.setPosition(300, 300);
+    //    bip.setSize(300, 300);
 
     BrainOutsPanel bop(b, 50);
     ds->getFace()->addWidgetPanel("brainOuts", &bop);
@@ -157,10 +158,59 @@ void runCritterLab() {
     rp.setSize(150, 150);
     rp.setPosition(300, 300);
 
-    ds->addBody(new BoxBody(btVector3(3, 3, 3), btVector3(1, 0.5, 0.5)));
-    ds->addBody(new BoxBody(btVector3(3, 3, 3), btVector3(1, 0.2, 0.7)));
-    ds->addBody(new BoxBody(btVector3(3, 3, 3), btVector3(1, 0.3, 0.7)));
-    ds->addBody(new BoxBody(btVector3(3, 3, 3), btVector3(1, 0.5, 0.5)));
+    ds->addBody(new BoxBody(btVector3(1, 0.5, 0.5), btVector3(3, 3, 3)*0.5));
+    ds->addBody(new BoxBody(btVector3(0, 2.5, 0.5), btVector3(3, 2, 3)*0.5));
+    ds->addBody(new BoxBody(btVector3(1, 0.5, 0.8), btVector3(2, 3, 1)*0.5));
+    ds->addBody(new BoxBody(btVector3(3, 0.5, 1.5), btVector3(2, 2, 1)*0.5));
+
+    runGLWindow(0, NULL, 1024, 800, VERSION, ds);
+
+}
+
+void runZoomDemo() {
+
+    Audio* audio = new Audio();
+    DefaultSpace* ds = new DefaultSpace(audio);
+
+    ds->addGround(50, 50, 5);
+
+    {
+        SpiderBody* spider = new SpiderBody(3, btVector3(0, 0, 5 + 1 * 2));
+        ds->addBody(spider);
+    }
+
+
+    runGLWindow(0, NULL, 1024, 800, VERSION, ds);
+
+}
+
+void runHumanoid() {
+
+    Audio* audio = new Audio();
+    DefaultSpace* ds = new DefaultSpace(audio);
+
+    ds->addGround(50, 50, 5);
+
+    Humanoid* h = new Humanoid(btVector3(0, 1.5, 0));
+    ds->addBody(h);
+
+    Humanoid* h2 = new Humanoid(btVector3(0, 0.5, 0));
+    ds->addBody(h2);
+
+    RetinaPanel rp(h->eyeRetina);
+    ds->getFace()->addWidgetPanel("retina", &rp);
+    rp.setSize(150, 150);
+    rp.setPosition(300, 600);
+
+    RetinaPanel rp2(h->lhRetina);
+    ds->getFace()->addWidgetPanel("lhRetina", &rp2);
+    rp2.setSize(150, 150);
+    rp2.setPosition(600, 600);
+
+    BrainOutsPanel bop(h->brain, 50);
+    ds->getFace()->addWidgetPanel("brainOuts", &bop);
+    bop.setPosition(400, 400);
+
 
     runGLWindow(0, NULL, 1024, 800, VERSION, ds);
 
@@ -184,9 +234,13 @@ int main(int argc, char** argv) {
 
     //runSim();
 
-    runBrainDemo();
+    //runBrainDemo();
 
-    //runCritterLab();
+    runCritterLab();
+
+    //runZoomDemo();
+
+    //runHumanoid();
 
     //runRT();
     //testGraph();

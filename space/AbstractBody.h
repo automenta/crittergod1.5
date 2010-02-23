@@ -80,6 +80,26 @@ public:
         return btVector3(0.5, 0.5, 0.5);
     }
 
+    void createJoint(btTypedConstraint* c) {
+        joints.push_back(c);
+        dyn->addConstraint(c);
+    }
+
+    btRigidBody* createRigidShape(btScalar mass, const btTransform& startTransform, btCollisionShape* shape) {
+        shapes.push_back(shape);
+        btRigidBody* rb = localCreateRigidBody(mass, startTransform, shape);
+        bodies.push_back(rb);
+        
+        rb->setDamping(0.05, 0.85);
+        rb->setDeactivationTime(0.8);
+        //m_bodies[i]->setSleepingThresholds(1.6, 2.5);
+        rb->setSleepingThresholds(0.5f, 0.5f);
+
+        return rb;
+    }
+
+    //Deprecated
+
     btRigidBody* localCreateRigidBody(btScalar mass, const btTransform& startTransform, btCollisionShape* shape) {
         bool isDynamic = (mass != 0.f);
 
@@ -91,6 +111,7 @@ public:
         btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, shape, localInertia);
         btRigidBody* body = new btRigidBody(rbInfo);
 
+        body->setUserPointer((void*) this);
         dyn->addRigidBody(body);
 
         return body;
