@@ -70,8 +70,16 @@
           <itemPath>neural/Neuron.h</itemPath>
         </logicalFolder>
         <logicalFolder name="objects" displayName="objects" projectFiles="true">
+          <itemPath>objects/BrainPanel.cpp</itemPath>
+          <itemPath>objects/BrainPanel.h</itemPath>
           <itemPath>objects/BrainVis.cpp</itemPath>
           <itemPath>objects/BrainVis.h</itemPath>
+          <itemPath>objects/FDBrainBody.cpp</itemPath>
+          <itemPath>objects/FDBrainBody.h</itemPath>
+          <itemPath>objects/NeuralSignalsPanel.cpp</itemPath>
+          <itemPath>objects/NeuralSignalsPanel.h</itemPath>
+          <itemPath>objects/RetinaPanel.cpp</itemPath>
+          <itemPath>objects/RetinaPanel.h</itemPath>
         </logicalFolder>
         <logicalFolder name="physics" displayName="physics" projectFiles="true">
           <logicalFolder name="BulletCollision"
@@ -560,6 +568,26 @@
           <itemPath>video/textprinter.cpp</itemPath>
           <itemPath>video/textprinter.h</itemPath>
         </logicalFolder>
+        <logicalFolder name="widget2d" displayName="widget2d" projectFiles="true">
+          <itemPath>widget2d/button.cpp</itemPath>
+          <itemPath>widget2d/button.h</itemPath>
+          <itemPath>widget2d/container.cpp</itemPath>
+          <itemPath>widget2d/container.h</itemPath>
+          <itemPath>widget2d/panel.cpp</itemPath>
+          <itemPath>widget2d/panel.h</itemPath>
+          <itemPath>widget2d/text.cpp</itemPath>
+          <itemPath>widget2d/text.h</itemPath>
+          <itemPath>widget2d/textprinter.cpp</itemPath>
+          <itemPath>widget2d/textprinter.h</itemPath>
+          <itemPath>widget2d/widget.cpp</itemPath>
+          <itemPath>widget2d/widget.h</itemPath>
+        </logicalFolder>
+        <logicalFolder name="widget3d" displayName="widget3d" projectFiles="true">
+          <itemPath>widget3d/Button.cpp</itemPath>
+          <itemPath>widget3d/Button.h</itemPath>
+          <itemPath>widget3d/TextRect.cpp</itemPath>
+          <itemPath>widget3d/TextRect.h</itemPath>
+        </logicalFolder>
         <itemPath>crittergod4.cpp</itemPath>
       </logicalFolder>
     </logicalFolder>
@@ -582,7 +610,6 @@
       </toolsSet>
       <compileType>
         <ccTool>
-          <developmentMode>2</developmentMode>
           <commandLine>-fopenmp</commandLine>
         </ccTool>
         <linkerTool>

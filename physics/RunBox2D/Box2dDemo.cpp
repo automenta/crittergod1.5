@@ -77,7 +77,7 @@ void Box2dDemo::clientMoveAndDisplay()
 
 
 
-void Box2dDemo::displayCallback(void) {
+void Box2dDemo::draw(void) {
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
 	
@@ -343,18 +343,18 @@ void	Box2dDemo::exitPhysics()
 	
 }
 
-void Box2dDemo::mouseFunc(int button, int state, int x, int y)
+void Box2dDemo::onMouseButton(int button, int state, int x, int y)
 {
 
 	if (!m_dialogDynamicsWorld->mouseFunc(button,state,x,y))
 	{
-		SpaceProcess::mouseFunc(button,state,x,y);
+		SpaceProcess::onMouseButton(button,state,x,y);
 	}
 }
 
-void	Box2dDemo::mouseMotionFunc(int x,int y)
+void	Box2dDemo::onMouseMove(int x,int y)
 {
 	m_dialogDynamicsWorld->mouseMotionFunc(x,y);
-	SpaceProcess::mouseMotionFunc(x,y);
+	SpaceProcess::onMouseMove(x,y);
 }
 

@@ -40,7 +40,7 @@ public:
         fmt.freq = 22050;
         fmt.format = AUDIO_S16SYS;
         fmt.channels = 1;
-        fmt.samples = 8192; /* A good value for games */
+        fmt.samples = 8192;
         fmt.callback = mixaudio;
         fmt.userdata = this;
 

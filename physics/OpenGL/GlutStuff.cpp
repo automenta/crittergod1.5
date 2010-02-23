@@ -27,7 +27,7 @@ std::vector<SpaceProcess*> processes;
 static	void glutKeyboardCallback(unsigned char key, int x, int y) {
 	for (unsigned i = 0; i < processes.size(); i++) {
 		SpaceProcess* sp = processes[i];
-		sp->keyboardCallback(key,x,y);
+		sp->onKeyboard(key,x,y);
 	}
 }
 
@@ -70,7 +70,7 @@ static void glutMoveAndDisplayCallback() {
 static void glutMouseFuncCallback(int button, int state, int x, int y) {
 	for (unsigned i = 0; i < processes.size(); i++) {
 		SpaceProcess* sp = processes[i];
-		sp->mouseFunc(button,state,x,y);
+		sp->onMouseButton(button,state,x,y);
 	}
 }
 
@@ -78,7 +78,7 @@ static void glutMouseFuncCallback(int button, int state, int x, int y) {
 static void	glutMotionFuncCallback(int x,int y) {
 	for (unsigned i = 0; i < processes.size(); i++) {
 		SpaceProcess* sp = processes[i];
-		sp->mouseMotionFunc(x,y);
+		sp->onMouseMove(x,y);
 	}
 }
 
@@ -86,7 +86,7 @@ static void	glutMotionFuncCallback(int x,int y) {
 static void glutDisplayCallback(void) {
 	for (unsigned i = 0; i < processes.size(); i++) {
 		SpaceProcess* sp = processes[i];
-		sp->displayCallback();
+		sp->draw();
 	}
 }
 
@@ -114,7 +114,7 @@ int runGLWindow(int argc, char **argv,int width,int height,const char* title, st
 
 	for (unsigned i = 0; i < processes.size(); i++) {
 		SpaceProcess* sp = processes[i];
-		sp->init();
+		sp->preDraw();
 	}
 
 	glutKeyboardFunc(glutKeyboardCallback);

@@ -14,19 +14,21 @@
 class SixDoFMotor : public NOutput {
     btGeneric6DofConstraint* constraint;
 
+    float maxLength;
+
 public:
 
-    SixDoFMotor(Brain* b, btGeneric6DofConstraint* _constraint) : NOutput(b, 2), constraint(_constraint) {
+    SixDoFMotor(Brain* b, btGeneric6DofConstraint* _constraint) : NOutput(b, 2), constraint(_constraint), maxLength(0.5) {
 
     }
 
     virtual void process(double dt) {
         double angle = outs[0]->getOutput();
-        double length = outs[1]->getOutput();
+        double length = (outs[1]->getOutput()+1.0)/2.0;
 
-        double scale = 0.005;
-        float xmax = length * scale;
-        float xmin = xmax * 0.5;
+        double scale = 0.001;
+        float xmax = fmin(maxLength, length * scale);
+        float xmin = 0;
 
         //cout << xmin << " " << xmax << "\n";
 

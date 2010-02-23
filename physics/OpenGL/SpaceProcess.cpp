@@ -119,7 +119,7 @@ void SpaceProcess::overrideGLShapeDrawer (GL_ShapeDrawer* shapeDrawer)
 	m_shapeDrawer = shapeDrawer;
 }
 
-void SpaceProcess::init(void)
+void SpaceProcess::preDraw(void)
 {
 
 	GLfloat light_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
@@ -149,8 +149,8 @@ void SpaceProcess::init(void)
 	glDepthFunc(GL_LESS);
 
 
-        float backgroundR = 1.0;
-        float backgroundG = 0.85;
+        float backgroundR = 0.7;
+        float backgroundG = 0.7;
         float backgroundB = 0.7;
         glClearColor(backgroundR, backgroundG, backgroundB, 1.0f);
 
@@ -334,7 +334,7 @@ void SpaceProcess::reshape(int w, int h)
 }
 
 
-void SpaceProcess::keyboardCallback(unsigned char key, int x, int y)
+void SpaceProcess::onKeyboard(unsigned char key, int x, int y)
 {
 	(void)x;
 	(void)y;
@@ -364,12 +364,6 @@ void SpaceProcess::keyboardCallback(unsigned char key, int x, int y)
 #endif
 		break;
 
-	case 'l' : stepLeft(); break;
-	case 'r' : stepRight(); break;
-	case 'f' : stepFront(); break;
-	case 'b' : stepBack(); break;
-	case 'z' : zoomIn(); break;
-	case 'x' : zoomOut(); break;
 	case 'i' : toggleIdle(); break;
 	case 'g' : m_enableshadows=!m_enableshadows;break;
 	case 'u' : m_shapeDrawer->enableTexture(!m_shapeDrawer->enableTexture(false));break;
@@ -467,7 +461,7 @@ void SpaceProcess::keyboardCallback(unsigned char key, int x, int y)
 			m_ortho = !m_ortho;//m_stepping = !m_stepping;
 			break;
 		}
-	case 's' : clientMoveAndDisplay(); break;
+	//case 's' : clientMoveAndDisplay(); break;
 		//    case ' ' : newRandom(); break;
 	case ' ':
 		clientResetScene();
@@ -524,16 +518,16 @@ void	SpaceProcess::setDebugMode(int mode)
 
 void SpaceProcess::moveAndDisplay()
 {
-	if (!m_idle)
+	//if (!m_idle)
 		clientMoveAndDisplay();
-	else
- 		displayCallback();
+	//else
+ 	//	draw();
 }
 
 
 
 
-void SpaceProcess::displayCallback()
+void SpaceProcess::draw()
 {
 }
 
@@ -672,7 +666,7 @@ btVector3	SpaceProcess::getRayTo(int x,int y)
 btScalar mousePickClamping = 30.f;
 
 
-void SpaceProcess::mouseFunc(int button, int state, int x, int y)
+void SpaceProcess::onMouseButton(int button, int state, int x, int y)
 {
 	if (state == 0) 
 	{
@@ -700,11 +694,11 @@ void SpaceProcess::mouseFunc(int button, int state, int x, int y)
 	{
 	case 2:
 		{
-			if (state==0)
-			{
-
-				shootBox(rayTo);
-			}
+//			if (state==0)
+//			{
+//
+//				shootBox(rayTo);
+//			}
 			break;
 		};
 	case 1:
@@ -834,7 +828,7 @@ void SpaceProcess::mouseFunc(int button, int state, int x, int y)
 
 }
 
-void	SpaceProcess::mouseMotionFunc(int x,int y)
+void	SpaceProcess::onMouseMove(int x,int y)
 {
 
 	if (m_pickConstraint)
@@ -1148,7 +1142,7 @@ void	SpaceProcess::renderscene(int pass)
 //
 void SpaceProcess::renderme()
 {
-	init();
+	preDraw();
 
 	updateCamera();
 

@@ -29,6 +29,8 @@ subject to the following restrictions:
 
 #include "AbstractBody.h"
 
+#include "../widget2d/container.h"
+
 class btBroadphaseInterface;
 class btCollisionShape;
 class btOverlappingPairCache;
@@ -39,7 +41,6 @@ class btDefaultCollisionConfiguration;
 
 class DefaultSpace : public AbstractSpace {
     float m_Time;
-    float m_fCyclePeriod; // in milliseconds
 
     btAlignedObjectArray<class AbstractBody*> bodies;
 
@@ -54,8 +55,8 @@ class DefaultSpace : public AbstractSpace {
 
     btDefaultCollisionConfiguration* m_collisionConfiguration;
 
-    GL_DialogDynamicsWorld* m_dialogDynamicsWorld;
-
+    Container faceContainer;
+    
     void initPhysics();
 
 public:
@@ -73,23 +74,23 @@ public:
 
     virtual void addBody(AbstractBody* a);
     virtual void removeBody(AbstractBody* a);
-
-    void updateAudio();
+    virtual void addGround(double x, double y, double z);
 
     virtual void clientMoveAndDisplay();
 
-    virtual void displayCallback();
-
-    virtual void keyboardCallback(unsigned char key, int x, int y);
+    virtual void draw();
 
     void process(btScalar deltaTime);
+    
     virtual void reshape(int w, int h);
 
-    virtual void mouseFunc(int button, int state, int x, int y);
-    virtual void mouseMotionFunc(int x, int y);
+    virtual void onKeyboard(unsigned char key, int x, int y);
+    virtual void onMouseButton(int button, int state, int x, int y);
+    virtual void onMouseMove(int x, int y);
 
     virtual void renderscene(int pass);
-    virtual void renderme();
+
+    virtual Container* getFace();
 
 };
 

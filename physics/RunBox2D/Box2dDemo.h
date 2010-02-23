@@ -62,18 +62,18 @@ class Box2dDemo : public AbstractSpace
 
 	virtual void clientMoveAndDisplay();
 
-	virtual void displayCallback();
+	virtual void draw();
 	
 	static SpaceProcess* Create()
 	{
 		Box2dDemo* demo = new Box2dDemo;
-		demo->init();
+		demo->preDraw();
 		demo->initPhysics();
 		return demo;
 	}
 
-	virtual void mouseFunc(int button, int state, int x, int y);
-	virtual void	mouseMotionFunc(int x,int y);
+	virtual void onMouseButton(int button, int state, int x, int y);
+	virtual void	onMouseMove(int x,int y);
 
 	
 };

@@ -75,8 +75,8 @@ class OutNeuron: public AbstractNeuron {
 public:
 	OutNeuron() {
 		AbstractNeuron();
-		stimulationFactor = 0.12;
-                potentialDecay = 0.99;
+		stimulationFactor = 0.1;
+                potentialDecay = 0.95;
 	}
 
 	void reset() {
@@ -141,14 +141,15 @@ public:
 	bool isPlastic;
 	float plasticityStrengthen;
 	float plasticityWeaken;
-	float maxSynapticWeightMagnitude; //was originally =5.0? why
+	float maxSynapseWeight;
+        float minSynapseWeight;
 
 	void print() {
 		cout << "  Neuron" << '\n';
 		cout << "    output? " << (target!=NULL) << '\n';
 		cout << "    inhibitory? " << isInhibitory << '\n';
 		cout << "    plastic? " << isPlastic << '\n';
-		cout << "    maxSynapticWeightMagnitude? " << maxSynapticWeightMagnitude << '\n';
+		cout << "    maxSynapticWeightMagnitude? " << maxSynapseWeight << '\n';
 		cout << "    plasticity strengthen=" << plasticityStrengthen << ", weaken=" << plasticityWeaken << '\n';
 		cout << "    potential decay " << potentialDecay << '\n';
 		cout << "    firing threshold " << firingThreshold << '\n';
@@ -234,7 +235,7 @@ public:
 
 	void forwardExhibitory() {
 		// do we spike/fire
-		if (potential >= firingThreshold) {
+		if (potential >= +1.0f * firingThreshold) {
 			// reset neural potential
 			potential = 0.0f;
 
@@ -265,9 +266,9 @@ public:
 			}
 		}
 	}
-
+        
 	void clampWeight(Synapse* s) {
-		s->weight = fmax(fmin(s->weight, maxSynapticWeightMagnitude), -maxSynapticWeightMagnitude);
+		s->weight = fmax(fmin(s->weight, maxSynapseWeight), minSynapseWeight);
 	}
 
 
@@ -318,7 +319,8 @@ public:
 		ni->plasticityWeaken = plasticityWeaken;
 
 		//maximum that a synapse can multiply a signal. 1.0 = conserved
-		ni->maxSynapticWeightMagnitude = 5.0;
+		ni->maxSynapseWeight = 2.0;
+                ni->minSynapseWeight = 0.1;
 
 		ni->potentialDecay = 0.995;
 

@@ -56,13 +56,15 @@ OBJECTFILES= \
 	${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btTriangleBuffer.o \
 	${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btStridingMeshInterface.o \
 	${OBJECTDIR}/space/Humanoid.o \
-	${OBJECTDIR}/physics/BulletCollision/Gimpact/btGenericPoolAllocator.o \
+	${OBJECTDIR}/widget2d/panel.o \
 	${OBJECTDIR}/physics/BulletCollision/CollisionDispatch/btSphereTriangleCollisionAlgorithm.o \
+	${OBJECTDIR}/physics/BulletCollision/Gimpact/btGenericPoolAllocator.o \
 	${OBJECTDIR}/math/vector2i.o \
 	${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btHeightfieldTerrainShape.o \
 	${OBJECTDIR}/physics/OpenGL/GL_Simplex1to4.o \
 	${OBJECTDIR}/physics/RunBox2D/Box2dDemo.o \
 	${OBJECTDIR}/space/SnakeBody.o \
+	${OBJECTDIR}/widget2d/container.o \
 	${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btEmptyShape.o \
 	${OBJECTDIR}/math/Math.o \
 	${OBJECTDIR}/physics/BulletDynamics/ConstraintSolver/btHingeConstraint.o \
@@ -70,6 +72,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/physics/BulletCollision/CollisionDispatch/btCollisionDispatcher.o \
 	${OBJECTDIR}/neural/Brain.o \
 	${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btConvexShape.o \
+	${OBJECTDIR}/widget3d/TextRect.o \
 	${OBJECTDIR}/physics/BulletCollision/CollisionDispatch/btCollisionWorld.o \
 	${OBJECTDIR}/physics/BulletSoftBody/btSoftRigidDynamicsWorld.o \
 	${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btBoxShape.o \
@@ -82,7 +85,10 @@ OBJECTFILES= \
 	${OBJECTDIR}/physics/BulletDynamics/Vehicle/btWheelInfo.o \
 	${OBJECTDIR}/physics/OpenGL/SpaceProcess.o \
 	${OBJECTDIR}/physics/BulletSoftBody/btSoftBody.o \
+	${OBJECTDIR}/widget2d/widget.o \
+	${OBJECTDIR}/objects/BrainPanel.o \
 	${OBJECTDIR}/physics/OpenGL/GL_DialogWindow.o \
+	${OBJECTDIR}/objects/NeuralSignalsPanel.o \
 	${OBJECTDIR}/physics/BulletSoftBody/btSoftBodyRigidBodyCollisionConfiguration.o \
 	${OBJECTDIR}/physics/BulletCollision/NarrowPhaseCollision/btGjkConvexCast.o \
 	${OBJECTDIR}/physics/OpenGL/GlutStuff.o \
@@ -97,8 +103,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btScaledBvhTriangleMeshShape.o \
 	${OBJECTDIR}/neural/NOutput.o \
 	${OBJECTDIR}/physics/RunBox2D/main.o \
-	${OBJECTDIR}/physics/BulletCollision/Gimpact/gim_contact.o \
 	${OBJECTDIR}/physics/BulletCollision/BroadphaseCollision/btSimpleBroadphase.o \
+	${OBJECTDIR}/physics/BulletCollision/Gimpact/gim_contact.o \
 	${OBJECTDIR}/video/font/FontDemo1.o \
 	${OBJECTDIR}/physics/BulletCollision/BroadphaseCollision/btDbvt.o \
 	${OBJECTDIR}/physics/BulletCollision/BroadphaseCollision/btOverlappingPairCache.o \
@@ -106,10 +112,13 @@ OBJECTFILES= \
 	${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btMultimaterialTriangleMeshShape.o \
 	${OBJECTDIR}/physics/BulletCollision/NarrowPhaseCollision/btMinkowskiPenetrationDepthSolver.o \
 	${OBJECTDIR}/crittergod4.o \
+	${OBJECTDIR}/objects/FDBrainBody.o \
 	${OBJECTDIR}/physics/OpenGL/Win32AppMain.o \
+	${OBJECTDIR}/widget3d/Button.o \
 	${OBJECTDIR}/physics/BulletDynamics/Dynamics/btSimpleDynamicsWorld.o \
 	${OBJECTDIR}/physics/BulletDynamics/ConstraintSolver/btPoint2PointConstraint.o \
 	${OBJECTDIR}/physics/BulletCollision/CollisionDispatch/btDefaultCollisionConfiguration.o \
+	${OBJECTDIR}/widget2d/textprinter.o \
 	${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btSphereShape.o \
 	${OBJECTDIR}/physics/BulletCollision/CollisionDispatch/btCompoundCollisionAlgorithm.o \
 	${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btConvexHullShape.o \
@@ -130,6 +139,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/physics/BulletCollision/CollisionDispatch/btBoxBoxCollisionAlgorithm.o \
 	${OBJECTDIR}/physics/BulletCollision/NarrowPhaseCollision/btRaycastCallback.o \
 	${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btCylinderShape.o \
+	${OBJECTDIR}/widget2d/button.o \
 	${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btUniformScalingShape.o \
 	${OBJECTDIR}/physics/BulletCollision/NarrowPhaseCollision/btConvexCast.o \
 	${OBJECTDIR}/physics/BulletCollision/Gimpact/btGImpactBvh.o \
@@ -191,6 +201,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/physics/BulletCollision/CollisionDispatch/btBoxBoxDetector.o \
 	${OBJECTDIR}/bio/Retina.o \
 	${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btMultiSphereShape.o \
+	${OBJECTDIR}/widget2d/text.o \
 	${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btShapeHull.o \
 	${OBJECTDIR}/bio/NColor.o \
 	${OBJECTDIR}/physics/BulletCollision/NarrowPhaseCollision/btGjkEpa2.o \
@@ -198,7 +209,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/neural/NInput.o \
 	${OBJECTDIR}/physics/BulletCollision/NarrowPhaseCollision/btGjkEpaPenetrationDepthSolver.o \
 	${OBJECTDIR}/video/GLWindow.o \
-	${OBJECTDIR}/physics/BulletCollision/CollisionDispatch/btActivatingCollisionAlgorithm.o
+	${OBJECTDIR}/physics/BulletCollision/CollisionDispatch/btActivatingCollisionAlgorithm.o \
+	${OBJECTDIR}/objects/RetinaPanel.o
 
 # C Compiler Flags
 CFLAGS=
@@ -349,15 +361,20 @@ ${OBJECTDIR}/space/Humanoid.o: nbproject/Makefile-${CND_CONF}.mk space/Humanoid.
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/space/Humanoid.o space/Humanoid.cpp
 
-${OBJECTDIR}/physics/BulletCollision/Gimpact/btGenericPoolAllocator.o: nbproject/Makefile-${CND_CONF}.mk physics/BulletCollision/Gimpact/btGenericPoolAllocator.cpp 
-	${MKDIR} -p ${OBJECTDIR}/physics/BulletCollision/Gimpact
+${OBJECTDIR}/widget2d/panel.o: nbproject/Makefile-${CND_CONF}.mk widget2d/panel.cpp 
+	${MKDIR} -p ${OBJECTDIR}/widget2d
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/physics/BulletCollision/Gimpact/btGenericPoolAllocator.o physics/BulletCollision/Gimpact/btGenericPoolAllocator.cpp
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/widget2d/panel.o widget2d/panel.cpp
 
 ${OBJECTDIR}/physics/BulletCollision/CollisionDispatch/btSphereTriangleCollisionAlgorithm.o: nbproject/Makefile-${CND_CONF}.mk physics/BulletCollision/CollisionDispatch/btSphereTriangleCollisionAlgorithm.cpp 
 	${MKDIR} -p ${OBJECTDIR}/physics/BulletCollision/CollisionDispatch
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/physics/BulletCollision/CollisionDispatch/btSphereTriangleCollisionAlgorithm.o physics/BulletCollision/CollisionDispatch/btSphereTriangleCollisionAlgorithm.cpp
+
+${OBJECTDIR}/physics/BulletCollision/Gimpact/btGenericPoolAllocator.o: nbproject/Makefile-${CND_CONF}.mk physics/BulletCollision/Gimpact/btGenericPoolAllocator.cpp 
+	${MKDIR} -p ${OBJECTDIR}/physics/BulletCollision/Gimpact
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/physics/BulletCollision/Gimpact/btGenericPoolAllocator.o physics/BulletCollision/Gimpact/btGenericPoolAllocator.cpp
 
 ${OBJECTDIR}/math/vector2i.o: nbproject/Makefile-${CND_CONF}.mk math/vector2i.cpp 
 	${MKDIR} -p ${OBJECTDIR}/math
@@ -383,6 +400,11 @@ ${OBJECTDIR}/space/SnakeBody.o: nbproject/Makefile-${CND_CONF}.mk space/SnakeBod
 	${MKDIR} -p ${OBJECTDIR}/space
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/space/SnakeBody.o space/SnakeBody.cpp
+
+${OBJECTDIR}/widget2d/container.o: nbproject/Makefile-${CND_CONF}.mk widget2d/container.cpp 
+	${MKDIR} -p ${OBJECTDIR}/widget2d
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/widget2d/container.o widget2d/container.cpp
 
 ${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btEmptyShape.o: nbproject/Makefile-${CND_CONF}.mk physics/BulletCollision/CollisionShapes/btEmptyShape.cpp 
 	${MKDIR} -p ${OBJECTDIR}/physics/BulletCollision/CollisionShapes
@@ -418,6 +440,11 @@ ${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btConvexShape.o: nbproject/
 	${MKDIR} -p ${OBJECTDIR}/physics/BulletCollision/CollisionShapes
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btConvexShape.o physics/BulletCollision/CollisionShapes/btConvexShape.cpp
+
+${OBJECTDIR}/widget3d/TextRect.o: nbproject/Makefile-${CND_CONF}.mk widget3d/TextRect.cpp 
+	${MKDIR} -p ${OBJECTDIR}/widget3d
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/widget3d/TextRect.o widget3d/TextRect.cpp
 
 ${OBJECTDIR}/physics/BulletCollision/CollisionDispatch/btCollisionWorld.o: nbproject/Makefile-${CND_CONF}.mk physics/BulletCollision/CollisionDispatch/btCollisionWorld.cpp 
 	${MKDIR} -p ${OBJECTDIR}/physics/BulletCollision/CollisionDispatch
@@ -479,10 +506,25 @@ ${OBJECTDIR}/physics/BulletSoftBody/btSoftBody.o: nbproject/Makefile-${CND_CONF}
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/physics/BulletSoftBody/btSoftBody.o physics/BulletSoftBody/btSoftBody.cpp
 
+${OBJECTDIR}/widget2d/widget.o: nbproject/Makefile-${CND_CONF}.mk widget2d/widget.cpp 
+	${MKDIR} -p ${OBJECTDIR}/widget2d
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/widget2d/widget.o widget2d/widget.cpp
+
+${OBJECTDIR}/objects/BrainPanel.o: nbproject/Makefile-${CND_CONF}.mk objects/BrainPanel.cpp 
+	${MKDIR} -p ${OBJECTDIR}/objects
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/objects/BrainPanel.o objects/BrainPanel.cpp
+
 ${OBJECTDIR}/physics/OpenGL/GL_DialogWindow.o: nbproject/Makefile-${CND_CONF}.mk physics/OpenGL/GL_DialogWindow.cpp 
 	${MKDIR} -p ${OBJECTDIR}/physics/OpenGL
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/physics/OpenGL/GL_DialogWindow.o physics/OpenGL/GL_DialogWindow.cpp
+
+${OBJECTDIR}/objects/NeuralSignalsPanel.o: nbproject/Makefile-${CND_CONF}.mk objects/NeuralSignalsPanel.cpp 
+	${MKDIR} -p ${OBJECTDIR}/objects
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/objects/NeuralSignalsPanel.o objects/NeuralSignalsPanel.cpp
 
 ${OBJECTDIR}/physics/BulletSoftBody/btSoftBodyRigidBodyCollisionConfiguration.o: nbproject/Makefile-${CND_CONF}.mk physics/BulletSoftBody/btSoftBodyRigidBodyCollisionConfiguration.cpp 
 	${MKDIR} -p ${OBJECTDIR}/physics/BulletSoftBody
@@ -554,15 +596,15 @@ ${OBJECTDIR}/physics/RunBox2D/main.o: nbproject/Makefile-${CND_CONF}.mk physics/
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/physics/RunBox2D/main.o physics/RunBox2D/main.cpp
 
-${OBJECTDIR}/physics/BulletCollision/Gimpact/gim_contact.o: nbproject/Makefile-${CND_CONF}.mk physics/BulletCollision/Gimpact/gim_contact.cpp 
-	${MKDIR} -p ${OBJECTDIR}/physics/BulletCollision/Gimpact
-	${RM} $@.d
-	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/physics/BulletCollision/Gimpact/gim_contact.o physics/BulletCollision/Gimpact/gim_contact.cpp
-
 ${OBJECTDIR}/physics/BulletCollision/BroadphaseCollision/btSimpleBroadphase.o: nbproject/Makefile-${CND_CONF}.mk physics/BulletCollision/BroadphaseCollision/btSimpleBroadphase.cpp 
 	${MKDIR} -p ${OBJECTDIR}/physics/BulletCollision/BroadphaseCollision
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/physics/BulletCollision/BroadphaseCollision/btSimpleBroadphase.o physics/BulletCollision/BroadphaseCollision/btSimpleBroadphase.cpp
+
+${OBJECTDIR}/physics/BulletCollision/Gimpact/gim_contact.o: nbproject/Makefile-${CND_CONF}.mk physics/BulletCollision/Gimpact/gim_contact.cpp 
+	${MKDIR} -p ${OBJECTDIR}/physics/BulletCollision/Gimpact
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/physics/BulletCollision/Gimpact/gim_contact.o physics/BulletCollision/Gimpact/gim_contact.cpp
 
 ${OBJECTDIR}/video/font/FontDemo1.o: nbproject/Makefile-${CND_CONF}.mk video/font/FontDemo1.cpp 
 	${MKDIR} -p ${OBJECTDIR}/video/font
@@ -599,10 +641,20 @@ ${OBJECTDIR}/crittergod4.o: nbproject/Makefile-${CND_CONF}.mk crittergod4.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/crittergod4.o crittergod4.cpp
 
+${OBJECTDIR}/objects/FDBrainBody.o: nbproject/Makefile-${CND_CONF}.mk objects/FDBrainBody.cpp 
+	${MKDIR} -p ${OBJECTDIR}/objects
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/objects/FDBrainBody.o objects/FDBrainBody.cpp
+
 ${OBJECTDIR}/physics/OpenGL/Win32AppMain.o: nbproject/Makefile-${CND_CONF}.mk physics/OpenGL/Win32AppMain.cpp 
 	${MKDIR} -p ${OBJECTDIR}/physics/OpenGL
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/physics/OpenGL/Win32AppMain.o physics/OpenGL/Win32AppMain.cpp
+
+${OBJECTDIR}/widget3d/Button.o: nbproject/Makefile-${CND_CONF}.mk widget3d/Button.cpp 
+	${MKDIR} -p ${OBJECTDIR}/widget3d
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/widget3d/Button.o widget3d/Button.cpp
 
 ${OBJECTDIR}/physics/BulletDynamics/Dynamics/btSimpleDynamicsWorld.o: nbproject/Makefile-${CND_CONF}.mk physics/BulletDynamics/Dynamics/btSimpleDynamicsWorld.cpp 
 	${MKDIR} -p ${OBJECTDIR}/physics/BulletDynamics/Dynamics
@@ -618,6 +670,11 @@ ${OBJECTDIR}/physics/BulletCollision/CollisionDispatch/btDefaultCollisionConfigu
 	${MKDIR} -p ${OBJECTDIR}/physics/BulletCollision/CollisionDispatch
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/physics/BulletCollision/CollisionDispatch/btDefaultCollisionConfiguration.o physics/BulletCollision/CollisionDispatch/btDefaultCollisionConfiguration.cpp
+
+${OBJECTDIR}/widget2d/textprinter.o: nbproject/Makefile-${CND_CONF}.mk widget2d/textprinter.cpp 
+	${MKDIR} -p ${OBJECTDIR}/widget2d
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/widget2d/textprinter.o widget2d/textprinter.cpp
 
 ${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btSphereShape.o: nbproject/Makefile-${CND_CONF}.mk physics/BulletCollision/CollisionShapes/btSphereShape.cpp 
 	${MKDIR} -p ${OBJECTDIR}/physics/BulletCollision/CollisionShapes
@@ -718,6 +775,11 @@ ${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btCylinderShape.o: nbprojec
 	${MKDIR} -p ${OBJECTDIR}/physics/BulletCollision/CollisionShapes
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btCylinderShape.o physics/BulletCollision/CollisionShapes/btCylinderShape.cpp
+
+${OBJECTDIR}/widget2d/button.o: nbproject/Makefile-${CND_CONF}.mk widget2d/button.cpp 
+	${MKDIR} -p ${OBJECTDIR}/widget2d
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/widget2d/button.o widget2d/button.cpp
 
 ${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btUniformScalingShape.o: nbproject/Makefile-${CND_CONF}.mk physics/BulletCollision/CollisionShapes/btUniformScalingShape.cpp 
 	${MKDIR} -p ${OBJECTDIR}/physics/BulletCollision/CollisionShapes
@@ -1024,6 +1086,11 @@ ${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btMultiSphereShape.o: nbpro
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btMultiSphereShape.o physics/BulletCollision/CollisionShapes/btMultiSphereShape.cpp
 
+${OBJECTDIR}/widget2d/text.o: nbproject/Makefile-${CND_CONF}.mk widget2d/text.cpp 
+	${MKDIR} -p ${OBJECTDIR}/widget2d
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/widget2d/text.o widget2d/text.cpp
+
 ${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btShapeHull.o: nbproject/Makefile-${CND_CONF}.mk physics/BulletCollision/CollisionShapes/btShapeHull.cpp 
 	${MKDIR} -p ${OBJECTDIR}/physics/BulletCollision/CollisionShapes
 	${RM} $@.d
@@ -1063,6 +1130,11 @@ ${OBJECTDIR}/physics/BulletCollision/CollisionDispatch/btActivatingCollisionAlgo
 	${MKDIR} -p ${OBJECTDIR}/physics/BulletCollision/CollisionDispatch
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/physics/BulletCollision/CollisionDispatch/btActivatingCollisionAlgorithm.o physics/BulletCollision/CollisionDispatch/btActivatingCollisionAlgorithm.cpp
+
+${OBJECTDIR}/objects/RetinaPanel.o: nbproject/Makefile-${CND_CONF}.mk objects/RetinaPanel.cpp 
+	${MKDIR} -p ${OBJECTDIR}/objects
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/objects/RetinaPanel.o objects/RetinaPanel.cpp
 
 # Subprojects
 .build-subprojects:

@@ -11,8 +11,6 @@
 #include <stdlib.h> // exit()
 
 #include <GL/glut.h>
-#include <glut/glut.h>
-
 #include <FTGL/ftgl.h>
 
 static FTFont *font[3];

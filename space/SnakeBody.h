@@ -24,7 +24,6 @@
 #define SPACE_FREQ  0.1 //lower requires brains to be more sensitive but gives more dynamic range in the space
 
 class SnakeBody : public AbstractBody {
-    Brain* brain;
 
     float m_fMuscleStrength;
 
@@ -35,10 +34,11 @@ class SnakeBody : public AbstractBody {
 
     NPosition *posHead, *posTail;
     NColor *bodyColorA, *bodyColorB;
-    Retina* eyeRetina;
-    SineSound *voice;
+    vector<SineSound*> voices;
 
 public:
+    Brain* brain;
+    Retina* eyeRetina;
 
     SnakeBody(const btVector3& _positionOffset, unsigned _parts) {
         positionOffset = _positionOffset;
@@ -67,9 +67,9 @@ public:
         }
         shapes.push_back(new btBoxShape(btVector3(0.25, 0.1, 0.1))); //eye
 
-        int numNeurons = 4096;
+        int numNeurons = 16384;
         int minSynapses = 1;
-        int maxSynapses = 8;
+        int maxSynapses = 4;
 
 
         brain = new Brain(numNeurons, minSynapses, maxSynapses, 0.5);
@@ -215,14 +215,21 @@ public:
         joints[joint++] = cp;
         dyn->addConstraint(cp);
 
-        eyeRetina = new Retina(brain, space->dynamicsWorld, bodies[i+1], 12, 8);
+        eyeRetina = new Retina(brain, space->dynamicsWorld, bodies[i+1], 32, 24, 7);
+
         posHead = new NPosition(brain, 1);
         posTail = new NPosition(brain, 1);
 
         bodyColorA = new NColor(brain);
         bodyColorB = new NColor(brain);
 
-        voice = new SineSound(brain, space->audio, 64);
+        //musical scale
+        voices.push_back( new SineSound(brain, space->audio, 396) );
+        voices.push_back( new SineSound(brain, space->audio, 417) );
+        voices.push_back( new SineSound(brain, space->audio, 528) );
+        voices.push_back( new SineSound(brain, space->audio, 639) );
+        voices.push_back( new SineSound(brain, space->audio, 741) );
+        voices.push_back( new SineSound(brain, space->audio, 852) );
 
         brain->init();
         brain->printSummary();
@@ -262,7 +269,8 @@ public:
         bodyColorA->process(dt);
         bodyColorB->process(dt);
 
-        voice->process(dt);
+        for (unsigned v = 0; v< voices.size(); v++)
+            voices[v]->process(dt);
     }
 
     btScalar getLegTargetAngle(int part) {

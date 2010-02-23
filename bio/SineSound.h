@@ -37,7 +37,8 @@ public:
         float v = outs[0]->getOutput();
         float a = outs[1]->getOutput();
 
-        freq = zeroFreq + FREQ_RANGE * (v + 1.0)*0.5;
+        //freq = zeroFreq + FREQ_RANGE * (v + 1.0)*0.5;
+        freq = zeroFreq;
         amp = zeroAmp + fabs(a)/0.5;
 
         //printf("frequency: %f %f\n", v, pg->frequency);

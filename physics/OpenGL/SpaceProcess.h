@@ -158,7 +158,7 @@ public:
 		m_forwardAxis = axis;
 	}
 
-	virtual void init();
+	virtual void preDraw();
 
 	void toggleIdle();
 	
@@ -205,7 +205,7 @@ public:
 
 	///callback methods by glut	
 
-	virtual void keyboardCallback(unsigned char key, int x, int y);
+	virtual void onKeyboard(unsigned char key, int x, int y);
 	
 	virtual void keyboardUpCallback(unsigned char key, int x, int y) {}
 	
@@ -215,11 +215,11 @@ public:
 
 	virtual void reshape(int w, int h);
 
-	virtual void mouseFunc(int button, int state, int x, int y);
+	virtual void onMouseButton(int button, int state, int x, int y);
 
-	virtual void	mouseMotionFunc(int x,int y);
+	virtual void	onMouseMove(int x,int y);
 	
-	virtual void displayCallback();
+	virtual void draw();
 
 	virtual 	void renderme();
 

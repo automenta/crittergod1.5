@@ -9,14 +9,13 @@
         <array_repeat_threshold>10</array_repeat_threshold>
       </gdbdebugger>
       <gizmo_options version="3">
-        <configurationname>GizmoSimple</configurationname>
       </gizmo_options>
       <runprofile version="6">
         <args></args>
         <rundir>/home/seh/NetBeansProjects/CritterGod4/.</rundir>
         <buildfirst>true</buildfirst>
         <console-type>2</console-type>
-        <terminal-type>1</terminal-type>
+        <terminal-type>0</terminal-type>
         <remove-instrumentation>0</remove-instrumentation>
         <environment>
         </environment>
@@ -28,7 +27,6 @@
         <array_repeat_threshold>10</array_repeat_threshold>
       </gdbdebugger>
       <gizmo_options version="3">
-        <configurationname>GizmoSimple</configurationname>
       </gizmo_options>
       <runprofile version="6">
         <args></args>

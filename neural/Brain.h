@@ -29,6 +29,9 @@ public:
     vector<InNeuron*> ins;
     vector<OutNeuron*> outs;
 
+    vector<float> inValues;
+    vector<float> outValues;
+
     vector<NeuronBuilder*> neuronBuilders;
 
     unsigned numNeurons;
@@ -72,7 +75,6 @@ public:
 
 
     //DEPRECATED
-
     Brain(unsigned numInputs, unsigned numOutputs, unsigned _numNeurons, unsigned _minSynapsesPerNeuron, unsigned _maxSynapsesPerNeuron, float _percentInhibitory) {
         numNeurons = _numNeurons;
         minSynapses = _minSynapsesPerNeuron;
@@ -95,6 +97,15 @@ public:
     Brain() {
     }
 
+    int getNeuronIndex(AbstractNeuron* a) {
+        for (unsigned i = 0; i < neurons.size(); i++) {
+            Neuron* n = neurons[i];
+            if (n == a)
+                return i;
+        }
+        return -1;
+    }
+
     void initDefaults() {
         minPlasticityStrengthen = 1.01;
         maxPlasticityStrengthen = 1.15;
@@ -111,21 +122,23 @@ public:
 
         percentChanceInputSynapse = 0.25;
 
-        minFiringThreshold = 0.05;
+        minFiringThreshold = 0.75;
 
-        maxFiringThreshold = 0.95;
+        maxFiringThreshold = 0.9;
 
     }
 
     InNeuron* newInput() {
         InNeuron* i = new InNeuron();
         ins.push_back(i);
+        inValues.resize(ins.size(), 0);
         return i;
     }
 
     OutNeuron* newOutput() {
         OutNeuron* o = new OutNeuron();
         outs.push_back(o);
+        outValues.resize(outs.size(), 0);
         return o;
     }
 
@@ -176,7 +189,11 @@ public:
         if (frand(0, 1) <= percentChanceInhibitoryNeuron) {
             an->isInhibitory = true;
         }// if not, is it motor ?
-        else if (frand(0, 1) <= percentChanceOutputNeuron) {
+        else {
+            an->isInhibitory = false;
+        }
+        
+        if (frand(0, 1) <= percentChanceOutputNeuron) {
             OutNeuron* mn = getRandomOutNeuron();
 
             // check if motor already used
@@ -265,6 +282,7 @@ public:
     }
 
     void init() {
+
         // determine number of neurons this brain will start with
         //int numNeurons = (int) Math.round(Maths.random(minNeuronsAtBuildtime, maxNeuronsAtBuildtime));
 
@@ -317,6 +335,11 @@ public:
 
         resetOutputs();
 
+        inValues.reserve(ins.size());
+        for (unsigned i = 0; i < ins.size(); i++) {
+            inValues[i] = ins[i]->getInput();
+        }
+
         for (unsigned i = 0; i < neurons.size(); i++) {
             Neuron* n = neurons[i];
             n->forward(dt);
@@ -340,6 +363,11 @@ public:
             n->output = n->nextOutput;
         }
 
+        outValues.reserve(outs.size());
+        for (unsigned i = 0; i < outs.size(); i++) {
+            outValues[i] = outs[i]->getOutput();
+        }
+
     }
 
     void forwardParallel(float dt) {
@@ -351,7 +379,7 @@ public:
         resetOutputs();
 
         unsigned i;
-        #pragma omp parallel for private(i)
+#pragma omp parallel for private(i)
         for (i = 0; i < neurons.size(); i++) {
             Neuron* n = neurons[i];
             n->forward(dt);
@@ -370,7 +398,7 @@ public:
         }
 
         // commit outputs at the end
-        #pragma omp parallel for private(i)
+#pragma omp parallel for private(i)
         for (i = 0; i < neurons.size(); i++) {
             Neuron* n = neurons[i];
             n->output = n->nextOutput;
@@ -406,6 +434,14 @@ public:
             n->potentialDecay = pd;
         }
         cout << "All neurons have potentialDecay=" << pd << "\n";
+    }
+
+    void setFiringThreshold(double ft) {
+        for (unsigned i = 0; i < neurons.size(); i++) {
+            Neuron* n = neurons[i];
+            n->firingThreshold = ft;
+        }
+        cout << "All neurons have firingThreshold=" << ft << "\n";
     }
 
 };
