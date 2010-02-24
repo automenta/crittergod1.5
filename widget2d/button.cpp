@@ -9,7 +9,7 @@ Button::Button(const char* text) {
     setSize(60, 40);
 
     if (text != NULL) {
-        addWidgetText("label", text);
+        addText("label", text);
     }
 
 }

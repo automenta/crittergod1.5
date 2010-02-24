@@ -45,6 +45,16 @@ class Widget
 		// drawing
 		bool			isTransparant;
 
+                float absX() { return absPosition.x; }
+                float absY() { return absPosition.y; }
+                
+                void span(float x1, float y1, float x2, float y2) {
+                    float w = x2-x1;
+                    float h = y2-y1;
+                    setSize(w, h);
+                    setPosition(x1, y1);
+                }
+
                 void setSize(float x, float y) {
                     size = Vector2f(x, y);
                 }

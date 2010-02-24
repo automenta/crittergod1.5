@@ -92,20 +92,24 @@ bool Panel::onMouseMove(int x, int y) {
 }
 
 bool Panel::onMouseButton(int button, int state, int mx, int my) {
+    if (Container::onMouseButton(button, state, mx, my))
+        return true;
+
     if (button == 0) {
         if (state == 0) {
             if (isMouseOver(mx, my)) {
                 dragStart = Vector3f(mx - x(), my - y(), 0);
                 dragging = true;
+                return true;
             }
         } else {
             if (dragging) {
                 dragging = false;
+                return true;
             }
         }
     }
 
-    Container::onMouseButton(button, state, mx, my);
 
     return false;
 

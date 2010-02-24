@@ -19,10 +19,10 @@ class Container : public Widget
 		map<string, Widget*>	children;
 		bool	mouseOverChild( Widget** fWidget, int x, int y );
 
-		Widget* addWidgetPanel( const string& name, Widget* nwidget );
-		Widget* addWidgetText( const string& name, unsigned int posx, unsigned int posy, const string& textstring );
-		Widget* addWidgetText( const string& name, const string& textstring );
-		Widget* addWidgetText( const string& name, unsigned int posx, unsigned int posy, const unsigned int* uintp );
+		Widget* addPanel( const string& name, Widget* nwidget );
+		Widget* addText( const string& name, unsigned int posx, unsigned int posy, const string& textstring );
+		Widget* addText( const string& name, const string& textstring );
+		Widget* addText( const string& name, unsigned int posx, unsigned int posy, const unsigned int* uintp );
 		//Widget*	addWidgetButton( const string& name, const Vector2i& pos, const Vector2i& dimensions, const string& textstring, const Vector2i& textpos, const cmdsettings& cmds, unsigned int responsetime, unsigned int minfresponsetime, unsigned int fresponseinterval );
 		//Widget*	addWidgetButton( const string& name, const Vector2i& pos, const Vector2i& dimensions, const string& textstring, const cmdsettings& cmds, unsigned int responsetime, unsigned int minfresponsetime, unsigned int fresponseinterval );
 

@@ -106,9 +106,6 @@ public:
     //int realneuronID;
     int neurontargetlayer;
 
-    // dendridic weight according
-    //int dendriteBranches;
-
     // its "weight"
     float weight;
 
@@ -117,7 +114,6 @@ public:
     SynapseBuilder() {
         isSensorNeuron = false;
         neurontargetlayer = 0;
-        //dendriteBranches = 1;
         weight = 0.0F;
     }
 
@@ -135,7 +131,6 @@ public:
 	int maxSynapses;
 	bool isInhibitory;
 	float firingThreshold;
-	//float dendridicBranches;
 	float potential;
 	float potentialDecay;
 	bool isPlastic;
@@ -278,7 +273,7 @@ public:
 class NeuronBuilder {
 public:
 
-	// inhibitory neuron by flag
+    // inhibitory neuron by flag
     bool isInhibitory;
     // Consistent Synapses flag
     bool hasConsistentSynapses;
@@ -286,10 +281,8 @@ public:
     bool hasInhibitorySynapses;
     // neuron firing potential
     double firingThreshold;
-    // dendridic branches
-    double maxDendridicBranches;
-    // motor neuron ability (excititatory only) flag
-    //boolean isMotor; //isMotor if motor!=null
+    
+    
     // function
     OutNeuron* out;
     // synaptic plasticity by flag
@@ -315,14 +308,14 @@ public:
 
         ni->isPlastic = isPlastic;
 
-		ni->plasticityStrengthen = plasticityStrengthen;
-		ni->plasticityWeaken = plasticityWeaken;
+        ni->plasticityStrengthen = plasticityStrengthen;
+        ni->plasticityWeaken = plasticityWeaken;
 
-		//maximum that a synapse can multiply a signal. 1.0 = conserved
-		ni->maxSynapseWeight = 2.0;
-                ni->minSynapseWeight = 0.1;
+        //maximum that a synapse can multiply a signal. 1.0 = conserved
+        ni->maxSynapseWeight = 0.99;
+        ni->minSynapseWeight = 0.01;
 
-		ni->potentialDecay = 0.995;
+        ni->potentialDecay = 0.995;
 
         //ni->synapseBuilders = synapseBuilders;
 

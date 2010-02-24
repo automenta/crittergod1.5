@@ -22,14 +22,14 @@ void Container::drawChildren() {
     }
 }
 
-Widget* Container::addWidgetPanel(const string& name, Widget* nwidget) {
+Widget* Container::addPanel(const string& name, Widget* nwidget) {
     children[name] = nwidget;
     children[name]->parent = this;
 
     return children[name];
 }
 
-Widget* Container::addWidgetText(const string& name, unsigned int posx, unsigned int posy, const string& textstring) {
+Widget* Container::addText(const string& name, unsigned int posx, unsigned int posy, const string& textstring) {
     Text* t = new Text(textstring);
     t->parent = this;
     t->setPosition(posx, posy);
@@ -39,7 +39,7 @@ Widget* Container::addWidgetText(const string& name, unsigned int posx, unsigned
     return children[name];
 }
 
-Widget* Container::addWidgetText(const string& name, const string& textstring) {
+Widget* Container::addText(const string& name, const string& textstring) {
     Text* t = new Text(textstring);
     t->parent = this;
     // 	t->translate(posx, posy);

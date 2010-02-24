@@ -11,22 +11,21 @@
 #include "../neural/Brain.h"
 #include "../widget2d/panel.h"
 #include "../widget2d/button.h"
+#include "../widget2d/slider.h"
 
 using namespace std;
 #include <map>
 
-class BrainPanel : public Panel, ButtonModel {
+class BrainPanel : public Panel, SliderModel {
     int frame;
     Brain* brain;
     //btVector3** neuronPosition;
 
     float firingThreshold;
     float potentialDecay;
-    Button *decThreshButton;
-    Button *incThreshButton;
-    
-    Button *decPotDecay;
-    Button *incPotDecay;
+
+    HSlider *ftSlider;
+    HSlider *pdSlider;
 
 public:
 
@@ -48,49 +47,26 @@ public:
         setSize(150, 150);
         setPosition(25, 25);
 
-        decThreshButton = new Button("Dec Fire Thresh");
-        decThreshButton->setModel(this);
-        decThreshButton->setSize(80, 25);
-        decThreshButton->setPosition(10, 10);
+        ftSlider = new HSlider(&firingThreshold, 0, 1.0);
+        ftSlider->span(5, 5, 100, 25);
+        ftSlider->setModel(this);
+        addPanel("ft", ftSlider);
 
-        incThreshButton = new Button("Inc Fire Thresh");
-        incThreshButton->setModel(this);
-        incThreshButton->setSize(80, 25);
-        incThreshButton->setPosition(10, 40);
-
-        decPotDecay = new Button("Dec Pot Decay");
-        decPotDecay->setModel(this);
-        decPotDecay->setSize(80, 25);
-        decPotDecay->setPosition(10, 70);
-
-        incPotDecay = new Button("Inc Pot Decay");
-        incPotDecay->setModel(this);
-        incPotDecay->setSize(80, 25);
-        incPotDecay->setPosition(10, 100);
-
-        addWidgetPanel("decThresh", decThreshButton);
-        addWidgetPanel("incThresh", incThreshButton);
-
-        addWidgetPanel("decDecay", decPotDecay);
-        addWidgetPanel("incDecay", incPotDecay);
-
+        pdSlider = new HSlider(&potentialDecay, 0, 1.0);
+        pdSlider->span(5, 30, 100, 50);
+        pdSlider->setModel(this);
+        addPanel("pd", pdSlider);
+        
     }
-    virtual void onChange(Button* b, int state) {
-        if (!state) {
-            if (b == incThreshButton) {
-                setThresh(firingThreshold + 0.05);
-            }
-            else if (b == decThreshButton) {
-                setThresh(firingThreshold - 0.05);
-            }
-            else if (b == decPotDecay) {
-                setPotentialDecay(potentialDecay - 0.01);
-            }
-            else if (b == incPotDecay) {
-                setPotentialDecay(potentialDecay + 0.01);
-            }
+    virtual void onChange(HSlider* s) {
 
+        if (s == ftSlider) {
+            setThresh(s->value());
         }
+        else if (s == pdSlider) {
+            setPotentialDecay(s->value());
+        }
+                
     }
 
     virtual void draw();

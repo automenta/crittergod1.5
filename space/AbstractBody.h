@@ -90,10 +90,12 @@ public:
         btRigidBody* rb = localCreateRigidBody(mass, startTransform, shape);
         bodies.push_back(rb);
         
-        rb->setDamping(0.05, 0.85);
-        rb->setDeactivationTime(0.8);
+        //rb->setDamping(0.05, 0.85);
+        rb->setDamping(0.0, 0);
+        rb->setDeactivationTime(2.0);
         //m_bodies[i]->setSleepingThresholds(1.6, 2.5);
-        rb->setSleepingThresholds(0.5f, 0.5f);
+        rb->setSleepingThresholds(0, 0);
+        //rb->setActivationState(ISLAND_SLEEPING);
 
         return rb;
     }

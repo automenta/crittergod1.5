@@ -218,8 +218,9 @@ public:
             an->plasticityStrengthen = frand(minPlasticityStrengthen, maxPlasticityStrengthen);
             an->plasticityWeaken = frand(minPlasticityWeaken, maxPlasticityWeaken);
         } else {
-            an->plasticityStrengthen = 1.0;
-            an->plasticityWeaken = 1.0;
+            an->isPlastic = false;
+            an->plasticityStrengthen = (minPlasticityStrengthen + maxPlasticityStrengthen)/2.0;
+            an->plasticityWeaken = (minPlasticityWeaken + maxPlasticityWeaken) / 2.0;
         }
 
         // does it have consistent synapses ?

@@ -127,6 +127,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/physics/BulletCollision/Gimpact/gim_tri_collision.o \
 	${OBJECTDIR}/physics/BulletCollision/BroadphaseCollision/btDbvtBroadphase.o \
 	${OBJECTDIR}/physics/BulletCollision/BroadphaseCollision/btQuantizedBvh.o \
+	${OBJECTDIR}/RunWidgets.o \
 	${OBJECTDIR}/physics/BulletCollision/CollisionDispatch/btConvexConvexAlgorithm.o \
 	${OBJECTDIR}/physics/OpenGL/AbstractSpace.o \
 	${OBJECTDIR}/video/raycast.o \
@@ -165,6 +166,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/physics/BulletCollision/BroadphaseCollision/btCollisionAlgorithm.o \
 	${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btCollisionShape.o \
 	${OBJECTDIR}/physics/BulletCollision/Gimpact/gim_box_set.o \
+	${OBJECTDIR}/widget2d/slider.o \
 	${OBJECTDIR}/physics/BulletSoftBody/btSoftBodyConcaveCollisionAlgorithm.o \
 	${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btTriangleCallback.o \
 	${OBJECTDIR}/physics/BulletCollision/CollisionDispatch/btBox2dBox2dCollisionAlgorithm.o \
@@ -197,11 +199,13 @@ OBJECTFILES= \
 	${OBJECTDIR}/physics/BulletCollision/CollisionDispatch/btSimulationIslandManager.o \
 	${OBJECTDIR}/physics/BulletCollision/CollisionDispatch/btConvexPlaneCollisionAlgorithm.o \
 	${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btConvex2dShape.o \
+	${OBJECTDIR}/RunSims.o \
 	${OBJECTDIR}/physics/LinearMath/btConvexHull.o \
 	${OBJECTDIR}/physics/BulletCollision/CollisionDispatch/btBoxBoxDetector.o \
 	${OBJECTDIR}/bio/Retina.o \
 	${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btMultiSphereShape.o \
 	${OBJECTDIR}/widget2d/text.o \
+	${OBJECTDIR}/RunTests.o \
 	${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btShapeHull.o \
 	${OBJECTDIR}/bio/NColor.o \
 	${OBJECTDIR}/physics/BulletCollision/NarrowPhaseCollision/btGjkEpa2.o \
@@ -716,6 +720,11 @@ ${OBJECTDIR}/physics/BulletCollision/BroadphaseCollision/btQuantizedBvh.o: nbpro
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/physics/BulletCollision/BroadphaseCollision/btQuantizedBvh.o physics/BulletCollision/BroadphaseCollision/btQuantizedBvh.cpp
 
+${OBJECTDIR}/RunWidgets.o: nbproject/Makefile-${CND_CONF}.mk RunWidgets.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/RunWidgets.o RunWidgets.cpp
+
 ${OBJECTDIR}/physics/BulletCollision/CollisionDispatch/btConvexConvexAlgorithm.o: nbproject/Makefile-${CND_CONF}.mk physics/BulletCollision/CollisionDispatch/btConvexConvexAlgorithm.cpp 
 	${MKDIR} -p ${OBJECTDIR}/physics/BulletCollision/CollisionDispatch
 	${RM} $@.d
@@ -906,6 +915,11 @@ ${OBJECTDIR}/physics/BulletCollision/Gimpact/gim_box_set.o: nbproject/Makefile-$
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/physics/BulletCollision/Gimpact/gim_box_set.o physics/BulletCollision/Gimpact/gim_box_set.cpp
 
+${OBJECTDIR}/widget2d/slider.o: nbproject/Makefile-${CND_CONF}.mk widget2d/slider.cpp 
+	${MKDIR} -p ${OBJECTDIR}/widget2d
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/widget2d/slider.o widget2d/slider.cpp
+
 ${OBJECTDIR}/physics/BulletSoftBody/btSoftBodyConcaveCollisionAlgorithm.o: nbproject/Makefile-${CND_CONF}.mk physics/BulletSoftBody/btSoftBodyConcaveCollisionAlgorithm.cpp 
 	${MKDIR} -p ${OBJECTDIR}/physics/BulletSoftBody
 	${RM} $@.d
@@ -1066,6 +1080,11 @@ ${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btConvex2dShape.o: nbprojec
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btConvex2dShape.o physics/BulletCollision/CollisionShapes/btConvex2dShape.cpp
 
+${OBJECTDIR}/RunSims.o: nbproject/Makefile-${CND_CONF}.mk RunSims.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/RunSims.o RunSims.cpp
+
 ${OBJECTDIR}/physics/LinearMath/btConvexHull.o: nbproject/Makefile-${CND_CONF}.mk physics/LinearMath/btConvexHull.cpp 
 	${MKDIR} -p ${OBJECTDIR}/physics/LinearMath
 	${RM} $@.d
@@ -1090,6 +1109,11 @@ ${OBJECTDIR}/widget2d/text.o: nbproject/Makefile-${CND_CONF}.mk widget2d/text.cp
 	${MKDIR} -p ${OBJECTDIR}/widget2d
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/widget2d/text.o widget2d/text.cpp
+
+${OBJECTDIR}/RunTests.o: nbproject/Makefile-${CND_CONF}.mk RunTests.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/RunTests.o RunTests.cpp
 
 ${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btShapeHull.o: nbproject/Makefile-${CND_CONF}.mk physics/BulletCollision/CollisionShapes/btShapeHull.cpp 
 	${MKDIR} -p ${OBJECTDIR}/physics/BulletCollision/CollisionShapes

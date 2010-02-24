@@ -575,6 +575,8 @@
           <itemPath>widget2d/container.h</itemPath>
           <itemPath>widget2d/panel.cpp</itemPath>
           <itemPath>widget2d/panel.h</itemPath>
+          <itemPath>widget2d/slider.cpp</itemPath>
+          <itemPath>widget2d/slider.h</itemPath>
           <itemPath>widget2d/text.cpp</itemPath>
           <itemPath>widget2d/text.h</itemPath>
           <itemPath>widget2d/textprinter.cpp</itemPath>
@@ -588,6 +590,12 @@
           <itemPath>widget3d/TextRect.cpp</itemPath>
           <itemPath>widget3d/TextRect.h</itemPath>
         </logicalFolder>
+        <itemPath>RunSims.cpp</itemPath>
+        <itemPath>RunSims.h</itemPath>
+        <itemPath>RunTests.cpp</itemPath>
+        <itemPath>RunTests.h</itemPath>
+        <itemPath>RunWidgets.cpp</itemPath>
+        <itemPath>RunWidgets.h</itemPath>
         <itemPath>crittergod4.cpp</itemPath>
       </logicalFolder>
     </logicalFolder>
