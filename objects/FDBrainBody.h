@@ -201,12 +201,17 @@ public:
     }
 
     virtual void draw() {
-        glBegin(GL_LINES);
+        glBegin(GL_TRIANGLES);
+        
         for (unsigned i = 0; i < brain->numNeurons; i++) {
             Neuron* a = brain->neurons[i];
             btRigidBody *aBod = neuronBody[i];
 
             btVector3 aPos = aBod->getWorldTransform().getOrigin();
+            btVector3 axis = aBod->getWorldTransform().getRotation().getAxis().normalized();
+            double aax = axis.getX();
+            double aay = axis.getY();
+
             unsigned numSynapses = a->synapses.size();
             for (unsigned s = 0; s < numSynapses; s++) {
                 Synapse* syn = a->synapses[s];
@@ -222,24 +227,31 @@ public:
                 }
 
                 btVector3 bPos = bBod->getWorldTransform().getOrigin();
+                //double bbx = bBod->getOrientation().getAxis().getX();
+                //double bby = bBod->getOrientation().getAxis().getY();
 
                 float w = syn->weight;
-                float cr, cg, cb;
+                float input = 0.5 + 0.5 * fmin(fabs(a->potential), 1.0);
+                float cr, cg, cb, ca;
                 if (w < 0) {
-                    cr = 0.5 + -syn->weight/2.0;
-                    cg = 0.5;
-                    cb = 0.5;
+                    cr = fmin(0.5 + -w/2.0, 1.0);
+                    cg = 0.25;
+                    cb = 0.25;
+                    ca = 0.5;
                 }
                 else {
-                    cg = 0.5 + syn->weight/2.0;
-                    cr = 0.5;
-                    cb = 0.5;
+                    cb = fmin(0.5 + w/2.0, 1.0);
+                    cr = 0.25;
+                    cg = 0.25;
+                    ca = 0.5;
                 }
 
-                glColor3f(cr, cg, cb);
-                glLineWidth(9);
-                glVertex3f(aPos.getX(), aPos.getY(), aPos.getZ());
+                glColor4f(cr, cg, cb, ca);
+
+                glVertex3f(aPos.getX()+aax*input, aPos.getY(), aPos.getZ());
+                glVertex3f(aPos.getX()-aax*input, aPos.getY(), aPos.getZ());
                 glVertex3f(bPos.getX(), bPos.getY(), bPos.getZ());
+
             }
 
         }
