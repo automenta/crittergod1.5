@@ -119,6 +119,7 @@ public:
         return body;
     }
 
+    virtual void draw() { }
 };
 
 #endif

@@ -447,6 +447,10 @@ void DefaultSpace::renderscene(int pass) {
         }
 
     }
+
+    for (unsigned b = 0; b < bodies.size(); b++) {
+        bodies[b]->draw();
+    }
 }
 
 void DefaultSpace::draw() {

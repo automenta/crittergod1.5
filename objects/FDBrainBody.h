@@ -61,11 +61,11 @@ public:
             transform.setIdentity();
             transform.setOrigin(btVector3(frand(-5, 5), frand(-5, 5), frand(-5, 5)));
 
-            if (n->target!=NULL)
+            if (n->target != NULL)
                 neuronShape[i] = new btSphereShape(1.0);
             else
                 neuronShape[i] = new btBoxShape(btVector3(1.0, 1.0, 1.0));
-            
+
             shapeToNeuron[neuronShape[i]] = n;
             neuronToBody[n] = bodies[i] = neuronBody[i] = createRigidShape(btScalar(1.), transform, neuronShape[i]);
         }
@@ -108,14 +108,14 @@ public:
             float s = 0.5;
             float w = s * (1.0 + (fabs(brain->neurons[i]->getOutput())));
             float h = s * (1.0 + (fabs(brain->neurons[i]->potential)));
-            bt->setLocalScaling(btVector3(w, h, (w + h) / 2.0));            
+            bt->setLocalScaling(btVector3(w, h, (w + h) / 2.0));
         }
 
         //attract
         btVector3 center(0, 0, 0);
 
         unsigned i;
-        #pragma omp parallel for private(i)
+#pragma omp parallel for private(i)
         for (i = 0; i < brain->numNeurons; i++) {
             Neuron* a = brain->neurons[i];
             btRigidBody *aBod = neuronBody[i];
@@ -160,7 +160,7 @@ public:
                 btVector3 force(0, 0, 0);
 
                 unsigned j;
-                #pragma omp parallel for private(j)
+#pragma omp parallel for private(j)
                 for (j = 0; j < brain->numNeurons; j++) {
                     if (i == j)
                         continue;
@@ -174,13 +174,13 @@ public:
                     double dist = bPos.distance(aPos);
 
                     double f = repulsion * /*(nMass * mMass)*/1.0 / (dist * dist);
-                    
+
                     double sx = f * (aPos.getX() - bPos.getX());
                     double sy = f * (aPos.getY() - bPos.getY());
                     double sz = f * (aPos.getZ() - bPos.getZ());
                     force += btVector3(sx, sy, sz);
                 }
-                
+
                 aPos += force * speed;
             }
             aBod->getWorldTransform().setOrigin(aPos);
@@ -190,7 +190,7 @@ public:
 
         center /= ((double) brain->numNeurons);
 
-        #pragma omp parallel for private(i)
+#pragma omp parallel for private(i)
         for (i = 0; i < brain->numNeurons; i++) {
             btRigidBody *aBod = neuronBody[i];
             btVector3 pos = aBod->getWorldTransform().getOrigin();
@@ -200,9 +200,57 @@ public:
 
     }
 
+    virtual void draw() {
+        glBegin(GL_LINES);
+        for (unsigned i = 0; i < brain->numNeurons; i++) {
+            Neuron* a = brain->neurons[i];
+            btRigidBody *aBod = neuronBody[i];
+
+            btVector3 aPos = aBod->getWorldTransform().getOrigin();
+            unsigned numSynapses = a->synapses.size();
+            for (unsigned s = 0; s < numSynapses; s++) {
+                Synapse* syn = a->synapses[s];
+                AbstractNeuron *b = syn->inputNeuron;
+                if (b == NULL) {
+                    cout << "synapse " << s << " has NULL inputNeuron\n";
+                    continue;
+                }
+
+                btRigidBody *bBod = neuronToBody[b];
+                if (bBod == NULL) {
+                    continue;
+                }
+
+                btVector3 bPos = bBod->getWorldTransform().getOrigin();
+
+                float w = syn->weight;
+                float cr, cg, cb;
+                if (w < 0) {
+                    cr = 0.5 + -syn->weight/2.0;
+                    cg = 0.5;
+                    cb = 0.5;
+                }
+                else {
+                    cg = 0.5 + syn->weight/2.0;
+                    cr = 0.5;
+                    cb = 0.5;
+                }
+
+                glColor3f(cr, cg, cb);
+                glLineWidth(9);
+                glVertex3f(aPos.getX(), aPos.getY(), aPos.getZ());
+                glVertex3f(bPos.getX(), bPos.getY(), bPos.getZ());
+            }
+
+        }
+        glEnd();
+
+    }
+
     virtual ~FDBrainBody() {
 
     }
+
 private:
 
 };
@@ -231,6 +279,7 @@ public:
         addPanel("tension", tensionSlider);
 
     }
+
 };
 
 #endif	/* _FDBRAINBODY_H */
