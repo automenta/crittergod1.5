@@ -15,6 +15,8 @@ subject to the following restrictions:
 #ifndef GL_SHAPE_DRAWER_H
 #define GL_SHAPE_DRAWER_H
 
+#include <FTGL/ftgl.h>
+
 class btCollisionShape;
 class btShapeHull;
 #include "LinearMath/btAlignedObjectArray.h"
@@ -41,6 +43,8 @@ protected:
 	
 
 	ShapeCache*							cache(btConvexShape*);
+
+        FTFont *font;
 
 public:
 		GL_ShapeDrawer();

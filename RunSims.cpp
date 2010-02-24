@@ -7,6 +7,40 @@
 
 #include "RunSims.h"
 
+#include <iostream>
+#include <string.h>
+
+using namespace std;
+
+#include "video/GLWindow.h"
+
+#include "neural/Brain.h"
+
+#include "objects/BrainPanel.h"
+#include "objects/PointerPanel.h"
+#include "objects/NeuralSignalsPanel.h"
+#include "objects/RetinaPanel.h"
+#include "objects/FDBrainBody.h"
+
+#include "space/DefaultSpace.h"
+#include "physics/OpenGL/GlutStuff.h"
+
+//#include "physics/optic/Raytracer.h"
+
+#include "video/font/FontDemo1.h"
+
+#include "space/AbstractBody.h"
+#include "space/SpiderBody.h"
+#include "space/SnakeBody.h"
+#include "space/Humanoid.h"
+#include "space/BoxBody.h"
+
+#include "audio/Audio.h"
+
+#include "widget2d/container.h"
+#include "widget2d/panel.h"
+#include "widget2d/button.h"
+#include "widget2d/text.h"
 
 
 
@@ -123,8 +157,6 @@ void runCritterLab() {
 
     b = snake1->brain;
 
-
-
     ds->getFace()->addPanel("brainControl", new BrainPanel(b));
 
     //    BrainInsPanel bip(b, 50);
@@ -150,18 +182,30 @@ void runCritterLab() {
 
 }
 
-void runZoomDemo() {
+void runInteractionDemo() {
 
     Audio* audio = new Audio();
     DefaultSpace* ds = new DefaultSpace(audio);
 
-    ds->addGround(50, 50, 5);
+    ds->addGround(30, 30, 5);
 
     {
         SpiderBody* spider = new SpiderBody(3, btVector3(0, 0, 5 + 1 * 2));
         ds->addBody(spider);
+
+        ds->addBody(new BoxBody(btVector3(1, 0.5, 0.5), btVector3(3, 3, 3)*0.5));
+        ds->addBody(new BoxBody(btVector3(0, 2.5, 0.5), btVector3(3, 2, 3)*0.5));
+        ds->addBody(new BoxBody(btVector3(1, 0.5, 0.8), btVector3(2, 3, 1)*0.5));
+        ds->addBody(new BoxBody(btVector3(3, 0.5, 1.5), btVector3(2, 2, 1)*0.5));
+
     }
 
+    ds->addBody(new TouchedBodyHilite(ds));
+    
+    PointerPanel pp(ds);
+    ds->getFace()->addPanel("pointerPanel", &pp);
+    pp.setPosition(400, 400);
+    pp.setSize(300, 300);
 
     runGLWindow(0, NULL, 1024, 800, VERSION, ds);
 

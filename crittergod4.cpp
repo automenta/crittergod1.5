@@ -13,18 +13,18 @@ int main(int argc, char** argv) {
 
     //runSim();
 
-    runBrainDemo();
+    //runBrainDemo();
 
     //runCritterLab();
 
-    //runZoomDemo();
+    runInteractionDemo();
 
     //runHumanoid();
 
     //runRT();
     //testGraph();
 
-    //runFontDemo();
+    //runFont3D();
 
     //runSliders();
 

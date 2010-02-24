@@ -187,13 +187,13 @@ OBJECTFILES= \
 	${OBJECTDIR}/physics/BulletCollision/Gimpact/btContactProcessing.o \
 	${OBJECTDIR}/physics/BulletCollision/CollisionDispatch/btCollisionObject.o \
 	${OBJECTDIR}/graph/Graph.o \
+	${OBJECTDIR}/objects/PointerPanel.o \
 	${OBJECTDIR}/physics/BulletCollision/BroadphaseCollision/btMultiSapBroadphase.o \
 	${OBJECTDIR}/physics/BulletCollision/NarrowPhaseCollision/btVoronoiSimplexSolver.o \
 	${OBJECTDIR}/video/mousepicker.o \
 	${OBJECTDIR}/physics/BulletSoftBody/btSoftRigidCollisionAlgorithm.o \
 	${OBJECTDIR}/physics/BulletDynamics/ConstraintSolver/btGeneric6DofSpringConstraint.o \
 	${OBJECTDIR}/physics/BulletCollision/NarrowPhaseCollision/btPersistentManifold.o \
-	${OBJECTDIR}/video/textprinter.o \
 	${OBJECTDIR}/physics/BulletDynamics/ConstraintSolver/btContactConstraint.o \
 	${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btCompoundShape.o \
 	${OBJECTDIR}/physics/BulletCollision/CollisionDispatch/btSimulationIslandManager.o \
@@ -1020,6 +1020,11 @@ ${OBJECTDIR}/graph/Graph.o: nbproject/Makefile-${CND_CONF}.mk graph/Graph.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/graph/Graph.o graph/Graph.cpp
 
+${OBJECTDIR}/objects/PointerPanel.o: nbproject/Makefile-${CND_CONF}.mk objects/PointerPanel.cpp 
+	${MKDIR} -p ${OBJECTDIR}/objects
+	${RM} $@.d
+	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/objects/PointerPanel.o objects/PointerPanel.cpp
+
 ${OBJECTDIR}/physics/BulletCollision/BroadphaseCollision/btMultiSapBroadphase.o: nbproject/Makefile-${CND_CONF}.mk physics/BulletCollision/BroadphaseCollision/btMultiSapBroadphase.cpp 
 	${MKDIR} -p ${OBJECTDIR}/physics/BulletCollision/BroadphaseCollision
 	${RM} $@.d
@@ -1049,11 +1054,6 @@ ${OBJECTDIR}/physics/BulletCollision/NarrowPhaseCollision/btPersistentManifold.o
 	${MKDIR} -p ${OBJECTDIR}/physics/BulletCollision/NarrowPhaseCollision
 	${RM} $@.d
 	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/physics/BulletCollision/NarrowPhaseCollision/btPersistentManifold.o physics/BulletCollision/NarrowPhaseCollision/btPersistentManifold.cpp
-
-${OBJECTDIR}/video/textprinter.o: nbproject/Makefile-${CND_CONF}.mk video/textprinter.cpp 
-	${MKDIR} -p ${OBJECTDIR}/video
-	${RM} $@.d
-	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/video/textprinter.o video/textprinter.cpp
 
 ${OBJECTDIR}/physics/BulletDynamics/ConstraintSolver/btContactConstraint.o: nbproject/Makefile-${CND_CONF}.mk physics/BulletDynamics/ConstraintSolver/btContactConstraint.cpp 
 	${MKDIR} -p ${OBJECTDIR}/physics/BulletDynamics/ConstraintSolver

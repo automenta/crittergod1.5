@@ -3,6 +3,7 @@
 using namespace std;
 #include <iostream>
 
+
 Textprinter* Textprinter::Instance() {
     static Textprinter t;
     return &t;
@@ -137,10 +138,10 @@ void Textprinter::print(const Vector2f& pos, const string& str) {
     glTranslatef(pos.x, pos.y, 0);
     //glScalef(1, -1, 1);
 
-    glDisable(GL_TEXTURE_2D);
     glDisable(GL_DEPTH_TEST);
-
-
+    glEnable(GL_TEXTURE_2D);
+    //glNormal3f(0.0, 0.0, 1.0);
+    
     const char *text = str.c_str();
 
     fonts[0]->Render(text);
@@ -180,13 +181,13 @@ void Textprinter::setUpFonts() {
     fonts = new FTFont *[1];
 
     const char* fontFilePath = "media/font/OCRA.ttf";
-    //fonts[0] = new FTExtrudeFont(fontFilePath);
-    fonts[0] = new FTPixmapFont(fontFilePath);
     //fonts[0] = new FTPolygonFont(fontFilePath);
+    fonts[0] = new FTPixmapFont(fontFilePath);
+    //fonts[0] = new FTBufferFont(fontFilePath);
 
     fonts[0]->FaceSize(12);
     //fonts[0]->Depth(32);
     fonts[0]->CharMap(ft_encoding_unicode);
-    //fonts[0]->UseDisplayList(true);
+    fonts[0]->UseDisplayList(true);
 
 }

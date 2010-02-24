@@ -78,6 +78,8 @@
           <itemPath>objects/FDBrainBody.h</itemPath>
           <itemPath>objects/NeuralSignalsPanel.cpp</itemPath>
           <itemPath>objects/NeuralSignalsPanel.h</itemPath>
+          <itemPath>objects/PointerPanel.cpp</itemPath>
+          <itemPath>objects/PointerPanel.h</itemPath>
           <itemPath>objects/RetinaPanel.cpp</itemPath>
           <itemPath>objects/RetinaPanel.h</itemPath>
         </logicalFolder>
@@ -565,8 +567,6 @@
           <itemPath>video/mousepicker.h</itemPath>
           <itemPath>video/raycast.cpp</itemPath>
           <itemPath>video/raycast.h</itemPath>
-          <itemPath>video/textprinter.cpp</itemPath>
-          <itemPath>video/textprinter.h</itemPath>
         </logicalFolder>
         <logicalFolder name="widget2d" displayName="widget2d" projectFiles="true">
           <itemPath>widget2d/button.cpp</itemPath>

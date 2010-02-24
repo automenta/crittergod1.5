@@ -120,8 +120,8 @@ void DefaultSpace::initPhysics() {
 
     dynamicsWorld->setInternalTickCallback(afterPhysics, this, true);
 
-    dynamicsWorld->setGravity(btVector3(0,0,0));
-    
+    dynamicsWorld->setGravity(btVector3(0, 0, 0));
+
     clientResetScene();
 }
 
@@ -133,7 +133,7 @@ void DefaultSpace::addGround(double x, double y, double z) {
     groundTransform.setIdentity();
     groundTransform.setOrigin(btVector3(0, -10, 0));
     localCreateRigidBody(btScalar(0.), groundTransform, groundShape);
-    dynamicsWorld->setGravity(btVector3(0,-10,0));
+    dynamicsWorld->setGravity(btVector3(0, -10, 0));
 }
 
 void DefaultSpace::addBody(AbstractBody* a) {
@@ -263,6 +263,45 @@ void DefaultSpace::clientMoveAndDisplay() {
 
     glFlush();
     glutSwapBuffers();
+
+    updatePointer();
+}
+
+void DefaultSpace::updatePointer() {
+    float pickDistance = 100.0f;
+    btVector3 rayTo = getRayTo(m_mouseOldX,m_mouseOldY);
+
+    touchedBody = NULL;
+    touched = NULL;
+    
+    //add a point to point constraint for picking
+    if (dynamicsWorld) {
+
+        btVector3 rayFrom;
+        if (m_ortho) {
+            rayFrom = rayTo;
+            rayFrom.setZ(-pickDistance);
+        } else {
+            rayFrom = m_cameraPosition;
+        }
+
+        btCollisionWorld::ClosestRayResultCallback rayCallback(rayFrom, rayTo);
+        dynamicsWorld->rayTest(rayFrom, rayTo, rayCallback);
+        if (rayCallback.hasHit()) {
+
+
+            btRigidBody* body = btRigidBody::upcast(rayCallback.m_collisionObject);
+            if (body) {
+                touchedBody = body;
+                touched = body;
+                //                                                    void* manager = body->getUserPointer();
+                //                                                    cout << "zooming to " << body << "\n";
+                //                                                    m_cameraTargetPositionNext = body->getWorldTransform().getOrigin();
+                //                                                    btVector3 d(0,1,0);
+                //                                                    m_cameraPositionNext = m_cameraTargetPositionNext + d;
+            }
+        }
+    }
 
 }
 

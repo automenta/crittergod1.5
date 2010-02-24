@@ -676,7 +676,7 @@ void SpaceProcess::onMouseButton(int button, int state, int x, int y)
     }
 
 	m_mouseOldX = x;
-    m_mouseOldY = y;
+        m_mouseOldY = y;
 
 	updateModifierKeys();
 	if ((m_modifierKeys& BT_ACTIVE_ALT) && (state==0))
@@ -693,42 +693,6 @@ void SpaceProcess::onMouseButton(int button, int state, int x, int y)
 	{
 	case 2:
 		{
-			if (state==1)
-			{
-
-
-				//add a point to point constraint for picking
-				if (dynamicsWorld)
-				{
-					
-					btVector3 rayFrom;
-					if (m_ortho)
-					{
-						rayFrom = rayTo;
-						rayFrom.setZ(-100.f);
-					} else
-					{
-						rayFrom = m_cameraPosition;
-					}
-					
-					btCollisionWorld::ClosestRayResultCallback rayCallback(rayFrom,rayTo);
-					dynamicsWorld->rayTest(rayFrom,rayTo,rayCallback);
-					if (rayCallback.hasHit())
-					{
-
-
-						btRigidBody* body = btRigidBody::upcast(rayCallback.m_collisionObject);
-						if (body)
-						{
-//                                                    void* manager = body->getUserPointer();
-//                                                    cout << "zooming to " << body << "\n";
-//                                                    m_cameraTargetPositionNext = body->getWorldTransform().getOrigin();
-//                                                    btVector3 d(0,1,0);
-//                                                    m_cameraPositionNext = m_cameraTargetPositionNext + d;
-                                                }
-                                        }
-                                }
-                        }
         
 //			if (state==0)
 //			{

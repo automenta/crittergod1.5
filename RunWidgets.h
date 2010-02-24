@@ -10,6 +10,7 @@
 
 
 void runSliders();
+void runFont3D();
 
 #endif	/* _RUNWIDGETS_H */
 

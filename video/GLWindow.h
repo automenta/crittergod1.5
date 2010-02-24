@@ -8,7 +8,6 @@
 //#include <SDL/SDL_opengl.h>
 #include <SDL/SDL_thread.h>
 
-#include "textprinter.h"
 #include "displaylists.h"
 #include "Spacetime.h"
 

@@ -60,6 +60,8 @@ class DefaultSpace : public AbstractSpace {
     void initPhysics();
 
 public:
+    void* touched;
+    btRigidBody* touchedBody;
 
     DefaultSpace(Audio* _audio) {
         this->audio = _audio;
@@ -91,6 +93,8 @@ public:
     virtual void renderscene(int pass);
 
     virtual Container* getFace();
+
+    void updatePointer();
 
 };
 

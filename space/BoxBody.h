@@ -22,16 +22,11 @@ public:
 	}
 
         virtual void init() {
-            shapes.reserve(1);
-            bodies.reserve(1);
-            
-            shapes.push_back(new btBoxShape(size));
-
             btTransform transform;
             transform.setIdentity();
             transform.setOrigin(position);
 
-            bodies.push_back(localCreateRigidBody(btScalar(1.), transform, shapes[0]));
+            createRigidShape(btScalar(1.), transform, new btBoxShape(size));
         }
 
 	virtual ~BoxBody();

@@ -628,6 +628,19 @@ void GL_ShapeDrawer::drawOpenGL(btScalar* m, const btCollisionShape* shape, cons
 					}
 					glEnd();
 #endif
+                                        {
+                                        glPushMatrix();
+                                            //glMaterialfv(GL_FRONT, GL_AMBIENT, front_ambient);
+                                            glColorMaterial(GL_FRONT, GL_DIFFUSE);
+                                            glTranslatef(0.0, 0.0, halfExtent[2]*1.1);
+                                    //        glRotatef(n / 1.11, 0.0, 1.0, 0.0);
+                                    //        glRotatef(n / 2.23, 1.0, 0.0, 0.0);
+                                    //        glRotatef(n / 3.17, 0.0, 0.0, 1.0);
+                                            glColor3f(1.0, 1.0, 1.0);
+                                            //drawText3D(font[fontindex], "SpaceGraph", 0, 0, 20.0);
+                                            font->Render("Xyz");
+                                        glPopMatrix();
+                                        }
 
 					useWireframeFallback = false;
 					break;
@@ -969,10 +982,30 @@ GL_ShapeDrawer::GL_ShapeDrawer()
 	m_texturehandle			=	0;
 	m_textureenabled		=	false;
 	m_textureinitialized	=	false;
+
+    char const *file = "media/font/OCRA.ttf";
+
+    font = new FTPolygonFont(file);
+
+    if(font->Error())
+    {
+        fprintf(stderr, "could not load font `%s'\n", file);
+        return;
+    }
+
+    font->FaceSize(1);
+    font->Depth(10);
+    font->CharMap(ft_encoding_unicode);
+
 }
 
 GL_ShapeDrawer::~GL_ShapeDrawer()
 {
+    if (font!=NULL) {
+        delete font;
+        font = NULL;
+    }
+    
 	int i;
 	for (i=0;i<m_shapecaches.size();i++)
 	{
