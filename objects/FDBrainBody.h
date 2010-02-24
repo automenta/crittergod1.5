@@ -135,7 +135,8 @@ public:
                 btVector3 bPos = bBod->getWorldTransform().getOrigin();
 
                 float currentLength = aPos.distance(bPos);
-                float f = tension * (currentLength - naturalLength)/* / ((float) numSynapses)*/;
+                float targetLength = naturalLength / (1.0 + (fabs(syn->weight)*8));
+                float f = tension * (currentLength - targetLength)/* / ((float) numSynapses)*/;
 
                 float sx = f * (bPos.getX() - aPos.getX());
                 float sy = f * (bPos.getY() - aPos.getY());

@@ -11,13 +11,13 @@
 int main(int argc, char** argv) {
 
 
-    //runSim();
+    runSim();
 
     //runBrainDemo();
 
     //runCritterLab();
 
-    runInteractionDemo();
+    //runInteractionDemo();
 
     //runHumanoid();
 

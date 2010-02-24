@@ -104,7 +104,7 @@ void runSim() {
 }
 
 void runBrainDemo() {
-    Brain* b = new Brain(16, 4, 64, 1, 4, 0.5);
+    Brain* b = new Brain(16, 4, 256, 1, 6, 0.5);
     b->printSummary();
 
     Audio* audio = new Audio();

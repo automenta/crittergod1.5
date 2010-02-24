@@ -632,12 +632,11 @@ void GL_ShapeDrawer::drawOpenGL(btScalar* m, const btCollisionShape* shape, cons
                                         glPushMatrix();
                                             //glMaterialfv(GL_FRONT, GL_AMBIENT, front_ambient);
                                             glColorMaterial(GL_FRONT, GL_DIFFUSE);
-                                            glTranslatef(0.0, 0.0, halfExtent[2]*1.1);
+                                            glTranslatef(-halfExtent[0]*1.1, 0.0, halfExtent[2]*1.1);
                                     //        glRotatef(n / 1.11, 0.0, 1.0, 0.0);
                                     //        glRotatef(n / 2.23, 1.0, 0.0, 0.0);
                                     //        glRotatef(n / 3.17, 0.0, 0.0, 1.0);
                                             glColor3f(1.0, 1.0, 1.0);
-                                            //drawText3D(font[fontindex], "SpaceGraph", 0, 0, 20.0);
                                             font->Render("Xyz");
                                         glPopMatrix();
                                         }

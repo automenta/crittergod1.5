@@ -618,6 +618,9 @@
       </toolsSet>
       <compileType>
         <ccTool>
+          <incDir>
+            <pElem>physics</pElem>
+          </incDir>
           <commandLine>-fopenmp</commandLine>
         </ccTool>
         <linkerTool>
