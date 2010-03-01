@@ -46,6 +46,8 @@ subject to the following restrictions:
 #include "LinearMath/btIDebugDraw.h"
 //for debugmodes
 
+#include "../space/BoxBody.h"
+
 #include <stdio.h> //printf debugging
 
 #define USE_DISPLAY_LISTS 1
@@ -401,7 +403,7 @@ void renderSquareA(float x, float y, float z)
 inline void glDrawVector(const btVector3& v) { glVertex3d(v[0], v[1], v[2]); }
 
 
-void GL_ShapeDrawer::drawOpenGL(btScalar* m, const btCollisionShape* shape, const btVector3& color,int	debugMode,const btVector3& worldBoundsMin,const btVector3& worldBoundsMax)
+void GL_ShapeDrawer::drawOpenGL(btScalar* m, const btCollisionShape* shape, void* obj, const btVector3& color,int	debugMode,const btVector3& worldBoundsMin,const btVector3& worldBoundsMax)
 {
 	if (shape->getShapeType() == CUSTOM_CONVEX_SHAPE_TYPE)
 	{
@@ -475,7 +477,7 @@ void GL_ShapeDrawer::drawOpenGL(btScalar* m, const btCollisionShape* shape, cons
 			{0,0,scalingFactor,0},
 			{0,0,0,1}};
 
-			drawOpenGL( (btScalar*)tmpScaling,convexShape,color,debugMode,worldBoundsMin,worldBoundsMax);
+			drawOpenGL( (btScalar*)tmpScaling,convexShape,NULL,color,debugMode,worldBoundsMin,worldBoundsMax);
 		}
 		glPopMatrix();
 		return;
@@ -490,7 +492,7 @@ void GL_ShapeDrawer::drawOpenGL(btScalar* m, const btCollisionShape* shape, cons
 			const btCollisionShape* colShape = compoundShape->getChildShape(i);
 			btScalar childMat[16];
 			childTrans.getOpenGLMatrix(childMat);
-			drawOpenGL(childMat,colShape,color,debugMode,worldBoundsMin,worldBoundsMax);
+			drawOpenGL(childMat,colShape,NULL,color,debugMode,worldBoundsMin,worldBoundsMax);
 		}
 
 	} else
@@ -610,6 +612,20 @@ void GL_ShapeDrawer::drawOpenGL(btScalar* m, const btCollisionShape* shape, cons
 						btVector3(-halfExtent[0],halfExtent[1],-halfExtent[2]),	
 						btVector3(halfExtent[0],-halfExtent[1],-halfExtent[2]),	
 						btVector3(-halfExtent[0],-halfExtent[1],-halfExtent[2])};
+
+                                         BoxBody* bg = NULL;
+                                         
+                                         if (obj!=NULL) {
+                                            AbstractBody* ag = (AbstractBody*)(obj);
+                                            if (ag!=NULL) {
+                                                bg = dynamic_cast<BoxBody*>(ag);
+                                            }
+                                         }
+
+                                        if (bg!=NULL) {
+                                            bg->preDraw();
+                                        }
+
 #if 1
 					glBegin (GL_TRIANGLES);
 					int si=36;
@@ -628,18 +644,11 @@ void GL_ShapeDrawer::drawOpenGL(btScalar* m, const btCollisionShape* shape, cons
 					}
 					glEnd();
 #endif
-                                        {
-                                        glPushMatrix();
-                                            //glMaterialfv(GL_FRONT, GL_AMBIENT, front_ambient);
-                                            glColorMaterial(GL_FRONT, GL_DIFFUSE);
-                                            glTranslatef(-halfExtent[0]*1.1, 0.0, halfExtent[2]*1.1);
-                                    //        glRotatef(n / 1.11, 0.0, 1.0, 0.0);
-                                    //        glRotatef(n / 2.23, 1.0, 0.0, 0.0);
-                                    //        glRotatef(n / 3.17, 0.0, 0.0, 1.0);
-                                            glColor3f(1.0, 1.0, 1.0);
-                                            font->Render("Xyz");
-                                        glPopMatrix();
+                                        if (bg!=NULL) {
+                                            bg->drawFront();
                                         }
+                                        
+
 
 					useWireframeFallback = false;
 					break;
@@ -733,7 +742,7 @@ void GL_ShapeDrawer::drawOpenGL(btScalar* m, const btCollisionShape* shape, cons
 					childTransform.setOrigin(multiSphereShape->getSpherePosition(i));
 					btScalar childMat[16];
 					childTransform.getOpenGLMatrix(childMat);
-					drawOpenGL(childMat,&sc,color,debugMode,worldBoundsMin,worldBoundsMax);
+					drawOpenGL(childMat,&sc,NULL,color,debugMode,worldBoundsMin,worldBoundsMax);
 				}
 
 				break;
@@ -982,19 +991,6 @@ GL_ShapeDrawer::GL_ShapeDrawer()
 	m_textureenabled		=	false;
 	m_textureinitialized	=	false;
 
-    char const *file = "media/font/OCRA.ttf";
-
-    font = new FTPolygonFont(file);
-
-    if(font->Error())
-    {
-        fprintf(stderr, "could not load font `%s'\n", file);
-        return;
-    }
-
-    font->FaceSize(1);
-    font->Depth(10);
-    font->CharMap(ft_encoding_unicode);
 
 }
 

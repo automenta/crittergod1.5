@@ -142,7 +142,7 @@ void	Box2dDemo::initPhysics()
 	setShadows(true);
 
 	setCameraDistance(btScalar(SCALING*50.));
-	m_cameraTargetPosition.setValue(0,0,0);//0, ARRAY_SIZE_Y, 0);
+	camTarget.setValue(0,0,0);//0, ARRAY_SIZE_Y, 0);
 
 	///collision configuration contains default setup for memory, collision setup
 	m_collisionConfiguration = new btDefaultCollisionConfiguration();

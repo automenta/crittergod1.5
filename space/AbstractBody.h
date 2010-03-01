@@ -92,11 +92,12 @@ public:
         
         //rb->setDamping(0.05, 0.85);
         rb->setDamping(0.0, 0);
+
         rb->setDeactivationTime(2.0);
         //m_bodies[i]->setSleepingThresholds(1.6, 2.5);
         rb->setSleepingThresholds(0, 0);
         //rb->setActivationState(ISLAND_SLEEPING);
-
+        
         return rb;
     }
 
@@ -113,7 +114,7 @@ public:
         btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, shape, localInertia);
         btRigidBody* body = new btRigidBody(rbInfo);
 
-        body->setUserPointer((void*) this);
+        body->setUserPointer(this);
         dyn->addRigidBody(body);
 
         return body;

@@ -44,6 +44,13 @@ class SpaceProcess
 	class CProfileIterator* m_profileIterator;
 
 	protected:
+            int gPickingConstraintId;
+            btVector3 gOldPickingPos;
+            btVector3 gHitPos;
+            float gOldPickingDist;
+            btRigidBody* pickedBody;//for deactivation state
+            btScalar mousePickClamping;
+            
 #ifdef USE_BT_CLOCK
 	btClock m_clock;
 #endif //USE_BT_CLOCK
@@ -54,16 +61,17 @@ class SpaceProcess
 
 	btCollisionShape*	m_shootBoxShape;
 
-	float	m_cameraDistance;
+	float	camDist, camDistNext;
 	int	m_debugMode;
 	
 	float m_ele;
 	float m_azi;
-	btVector3 m_cameraPosition;
-	btVector3 m_cameraTargetPosition;//look at
-
+	btVector3 camPos;
+	btVector3 camTarget;//look at
+        btVector3 bgColor;
+        
 	btVector3 m_cameraPositionNext;
-	btVector3 m_cameraTargetPositionNext;//look at
+	btVector3 camTargetNext;//look at
 	double cameraSpeed;
 
 	btVector3 rayForward;
@@ -79,7 +87,7 @@ protected:
 
 	float m_scaleBottom;
 	float m_scaleFactor;
-	btVector3 m_cameraUp;
+	btVector3 camUp;
 	btVector3 m_cameraRight;
 	int	m_forwardAxis;
 
@@ -149,9 +157,9 @@ public:
 		m_azi = azi;
 	}
 	
-	void	setCameraUp(const btVector3& camUp)
+	void	setCameraUp(const btVector3& nextCamUp)
 	{
-		m_cameraUp = camUp;
+		camUp = nextCamUp;
 	}
 	void	setCameraForwardAxis(int axis)
 	{
@@ -162,15 +170,15 @@ public:
 
 	void toggleIdle();
 	
-	virtual void updateCamera();
+	virtual void updateCamera(float dt);
 
 	btVector3	getCameraPosition()
 	{
-		return m_cameraPosition;
+		return camPos;
 	}
 	btVector3	getCameraTargetPosition()
 	{
-		return m_cameraTargetPosition;
+		return camTarget;
 	}
 
 	btScalar	getDeltaTimeMicroseconds()

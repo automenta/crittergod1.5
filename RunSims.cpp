@@ -42,8 +42,8 @@ using namespace std;
 #include "widget2d/button.h"
 #include "widget2d/text.h"
 
-
-
+#include "widget3d/Rect.h"
+#include "widget3d/TextRect.h"
 
 void runSim() {
     Audio* audio = new Audio();
@@ -80,7 +80,7 @@ void runSim() {
 
 
     {
-        ds->addGround(50, 50, 5);
+        ds->addGround(50, 50, 5, 0, -10, 0);
 
         for (unsigned i = 2; i < 5; i++) {
             SnakeBody* snake1 = new SnakeBody(btVector3(0, 0, 0), i * 2);
@@ -104,7 +104,7 @@ void runSim() {
 }
 
 void runBrainDemo() {
-    Brain* b = new Brain(16, 4, 256, 1, 6, 0.5);
+    Brain* b = new Brain(16, 4, 256, 1, 4, 0.5);
     b->printSummary();
 
     Audio* audio = new Audio();
@@ -113,7 +113,7 @@ void runBrainDemo() {
     ds->setShadows(false);
     ds->setTexturing(false);
 
-    FDBrainBody fdb(b);
+    FDBrainBody fdb(b, 100, 100, 100);
     ds->addBody(&fdb);
 
     BrainPanel *bp = new BrainPanel(b);
@@ -123,7 +123,7 @@ void runBrainDemo() {
     FDBrainPanel fdo(&fdb);
     ds->getFace()->addPanel("fdPanel", &fdo);
     fdo.span(350, 500, 450, 600);
-    
+
     BrainInsPanel bip(b, 100);
     ds->getFace()->addPanel("brainIns", &bip);
     bip.setPosition(600, 600);
@@ -133,7 +133,7 @@ void runBrainDemo() {
     bop.setPosition(800, 600);
 
 
-    runGLWindow(0, NULL, 1200, 1000, VERSION, ds);
+    runGLWindow(0, NULL, 1024, 800, VERSION, ds);
 
 }
 
@@ -144,7 +144,7 @@ void runCritterLab() {
 
     Brain *b;
 
-    ds->addGround(50, 50, 5);
+    ds->addGround(50, 50, 5, 0, -10, 0);
 
     {
         SpiderBody* spider = new SpiderBody(3, btVector3(0, 0, 5 + 1 * 2));
@@ -173,10 +173,10 @@ void runCritterLab() {
     rp.setSize(150, 150);
     rp.setPosition(300, 300);
 
-    ds->addBody(new BoxBody(btVector3(1, 0.5, 0.5), btVector3(3, 3, 3)*0.5));
-    ds->addBody(new BoxBody(btVector3(0, 2.5, 0.5), btVector3(3, 2, 3)*0.5));
-    ds->addBody(new BoxBody(btVector3(1, 0.5, 0.8), btVector3(2, 3, 1)*0.5));
-    ds->addBody(new BoxBody(btVector3(3, 0.5, 1.5), btVector3(2, 2, 1)*0.5));
+    ds->addBody(new BoxBody(new btVector3(1, 0.5, 0.5), new btVector3(3, 3, 3)));
+    ds->addBody(new BoxBody(new btVector3(0, 2.5, 0.5), new btVector3(3, 2, 3)));
+    ds->addBody(new BoxBody(new btVector3(1, 0.5, 0.8), new btVector3(2, 3, 1)));
+    ds->addBody(new BoxBody(new btVector3(3, 0.5, 1.5), new btVector3(2, 2, 1)));
 
     runGLWindow(0, NULL, 1224, 1000, VERSION, ds);
 
@@ -187,21 +187,21 @@ void runInteractionDemo() {
     Audio* audio = new Audio();
     DefaultSpace* ds = new DefaultSpace(audio);
 
-    ds->addGround(30, 30, 5);
+    ds->addGround(30, 30, 5, 0, -10, 0);
 
     {
         SpiderBody* spider = new SpiderBody(3, btVector3(0, 0, 5 + 1 * 2));
         ds->addBody(spider);
 
-        ds->addBody(new BoxBody(btVector3(1, 0.5, 0.5), btVector3(3, 3, 3)*0.5));
-        ds->addBody(new BoxBody(btVector3(0, 2.5, 0.5), btVector3(3, 2, 3)*0.5));
-        ds->addBody(new BoxBody(btVector3(1, 0.5, 0.8), btVector3(2, 3, 1)*0.5));
-        ds->addBody(new BoxBody(btVector3(3, 0.5, 1.5), btVector3(2, 2, 1)*0.5));
+        ds->addBody(new BoxBody(new btVector3(1, 0.5, 0.5), new btVector3(3, 3, 3)));
+        ds->addBody(new BoxBody(new btVector3(0, 2.5, 0.5), new btVector3(3, 2, 3)));
+        ds->addBody(new BoxBody(new btVector3(1, 0.5, 0.8), new btVector3(2, 3, 1)));
+        ds->addBody(new BoxBody(new btVector3(3, 0.5, 1.5), new btVector3(2, 2, 1)));
 
     }
 
     ds->addBody(new TouchedBodyHilite(ds));
-    
+
     PointerPanel pp(ds);
     ds->getFace()->addPanel("pointerPanel", &pp);
     pp.setPosition(400, 400);
@@ -216,7 +216,7 @@ void runHumanoid() {
     Audio* audio = new Audio();
     DefaultSpace* ds = new DefaultSpace(audio);
 
-    ds->addGround(50, 50, 5);
+    ds->addGround(15, 15, 1, 0, -10, 0);
 
     Humanoid* h = new Humanoid(btVector3(0, 1.5, 0));
     ds->addBody(h);
@@ -243,4 +243,182 @@ void runHumanoid() {
 
 }
 
+void runWidgets3D() {
+    Audio* audio = new Audio();
+    DefaultSpace* ds = new DefaultSpace(audio);
 
+    //ds->addGround(50, 50, 5);
+
+    BoxBody* bc = new BoxBody(new btVector3(0, 0.5, 0.25), new btVector3(6, 4, 0.1));
+    bc->front()->push_back(new TextRect("Xyz", 0.85, 0.45));
+    ds->addBody(bc);
+
+    BoxBody* bb = new BoxBody(new btVector3(7, 4, 1.0), new btVector3(6, 4, 0.1));
+    bb->front()->push_back(new TextRect("Abcdefg", 0.3, 0.3));
+    ds->addBody(bb);
+
+    BoxBody* ba = new BoxBody(new btVector3(0, 0, 0.5), new btVector3(3, 2, 0.1));
+    {
+        Rect* r1 = new Rect(-0.5, -0.5, 0, 0.2, 0.2);
+        *(r1->fillColor) = btVector3(0, 1, 0);
+        ba->front()->push_back(r1);
+
+        Rect* r2 = new Rect(0.5, -0.5, 0, 0.2, 0.2);
+        *(r2->fillColor) = btVector3(0, 0, 1);
+        ba->front()->push_back(r2);
+
+        Rect* r3 = new Rect(0.5, 0.5, 0, 0.2, 0.2);
+        *(r3->fillColor) = btVector3(1, 0, 0);
+        ba->front()->push_back(r3);
+
+        Rect* r4 = new Rect(-0.5, 0.5, 0, 0.2, 0.2);
+        ba->front()->push_back(r4);
+
+    }
+    ds->addBody(ba);
+
+
+    runGLWindow(0, NULL, 1024, 800, VERSION, ds);
+
+}
+
+class SignalGeneratorBox : public BoxBody {
+    NeuralSignalsPanel *nsp;
+
+public:
+
+    SignalGeneratorBox(btVector3* _pos, btVector3* _size, vector<float>* b, int _historySize, const char *label) : BoxBody(_pos, _size) {
+        nsp = new NeuralSignalsPanel(b, _historySize);
+
+        TextRect* labelRect = new TextRect(label, 0.2, 0.2);
+        *(labelRect->pos) = btVector3(-1, 1.0, 0);
+        front()->push_back(labelRect);
+
+        TextRect* labelRect2 = new TextRect(label, 0.2, 0.2);
+        *(labelRect2->pos) = btVector3(1, -1.0, 0);
+        front()->push_back(labelRect2);
+
+    }
+
+    void drawRect(float r, float g, float b, float x1, float y1, float w, float h, float z) {
+        glColor4f(r, g, b, 1);
+        glVertex3f(x1, y1, z);
+        glVertex3f(x1, y1 + h, z);
+        glVertex3f(x1 + w, y1 + h, z);
+        glVertex3f(x1 + w, y1, z);
+    }
+
+    void drawSignals(double z) {
+        nsp->update();
+
+        float hWidth = 1.0 / float(nsp->historySize);
+        float oHeight = 1.0 / float(nsp->numSignals);
+
+        double min = -1, max = 1;
+
+        bool normalize = true;
+        if (normalize) {
+            min = max = nsp->v[0][0];
+            for (unsigned o = 0; o < nsp->numSignals; o++) {
+                for (unsigned h = 0; h < nsp->historySize; h++) {
+                    double a = nsp->v[o][h];
+                    if (a < min) min = a;
+                    if (a > max) max = a;
+                }
+            }
+            if (abs(min) > abs(max)) {
+                max = -min;
+            } else if (abs(min) < abs(max)) {
+                min = -max;
+            }
+        }
+
+        float x = 0;
+        float y = oHeight / 2;
+
+
+        for (int o = 0; o < nsp->numSignals; o++) {
+            for (int h = 0; h < nsp->historySize; h++) {
+                float a = fmin(a, max);
+                a = fmax(a, min);
+                a = (nsp->v[o][h] - min) / (max - min);
+
+                double r, g, b;
+                if (nsp->v[o][h] < 0) {
+                    r = a;
+                    g = a / 4.0;
+                    b = a / 2.0;
+                } else {
+                    b = a / 4.0;
+                    g = a;
+                    r = a / 2.0;
+                }
+                float bh = (1.0 * abs(a - 0.5)) * oHeight;
+                drawRect(r, g, b, -0.5 + x, -1.0 + y + (1.0 - bh) / 2, hWidth, bh, z);
+                x += hWidth;
+            }
+            x = 0;
+            y += oHeight;
+
+        }
+    }
+
+    virtual void drawFront() {
+        BoxBody::drawFront();
+
+        float d = size->getZ() + 0.1;
+
+        glPushMatrix();
+        glScalef(-size->getX()*2, size->getY()*2, -1.0);
+
+
+        glBegin(GL_QUADS);
+        //drawRect(0, 0, 0, -0.5, -0.5, 1.0, 1.0, d);
+        drawSignals(d * 2);
+        glEnd();
+
+        glPopMatrix();
+
+    }
+};
+
+void runBrain2Demo() {
+    Brain* b = new Brain(1, 2, 128, 8, 16, 0.5);
+    b->printSummary();
+
+    Audio* audio = new Audio();
+    DefaultSpace* ds = new DefaultSpace(audio);
+
+    ds->setShadows(false);
+    //ds->setTexturing(false);
+
+    btRigidBody* g = ds->addGround(50, 5, 50, 0, -20, 0);
+
+    FDBrainBody fdb(b, 100, 100, 35);
+    ds->addBody(&fdb);
+
+
+    AbstractBody* gen = new SignalGeneratorBox(new btVector3(-10, 10, 0), new btVector3(4, 3, 0.1), &(b->inValues), 128, "Inputs");
+    ds->addBody(gen);
+
+    BrainPanel *bp = new BrainPanel(b);
+    ds->getFace()->addPanel("brainControl", bp);
+    bp->setPosition(15, 15);
+
+    //FDBrainPanel fdo(&fdb);
+    //ds->getFace()->addPanel("fdPanel", &fdo);
+    //fdo.span(350, 500, 450, 600);
+
+    //    BrainInsPanel bip(b, 100);
+    //    ds->getFace()->addPanel("brainIns", &bip);
+    //    bip.setPosition(600, 600);
+
+
+    BrainOutsPanel bop(b, 100);
+    ds->getFace()->addPanel("brainOuts", &bop);
+    bop.setPosition(800, 600);
+
+
+    runGLWindow(0, NULL, 1024, 800, VERSION, ds);
+
+}

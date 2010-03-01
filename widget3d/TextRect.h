@@ -8,11 +8,28 @@
 #ifndef _TEXTRECT_H
 #define	_TEXTRECT_H
 
-class TextRect {
+#include "Rect.h"
+
+using namespace std;
+#include <string>
+
+class TextRect : public Rect {
+
 public:
-    TextRect();
-    TextRect(const TextRect& orig);
-    virtual ~TextRect();
+    string text;
+
+    TextRect(const char* _text, float w, float h)  {
+        Rect();
+        text = _text;
+        this->pos = new btVector3(-0.5,0,0);
+        this->size = new btVector3(w, h, 1.0);
+        this->fillColor = NULL;
+    }
+
+    virtual ~TextRect() {
+
+    }
+    
 private:
 
 };

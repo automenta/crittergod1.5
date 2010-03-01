@@ -54,8 +54,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/physics/BulletCollision/NarrowPhaseCollision/btGjkPairDetector.o \
 	${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btTriangleIndexVertexMaterialArray.o \
 	${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btTriangleBuffer.o \
-	${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btStridingMeshInterface.o \
 	${OBJECTDIR}/space/Humanoid.o \
+	${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btStridingMeshInterface.o \
 	${OBJECTDIR}/widget2d/panel.o \
 	${OBJECTDIR}/physics/BulletCollision/CollisionDispatch/btSphereTriangleCollisionAlgorithm.o \
 	${OBJECTDIR}/physics/BulletCollision/Gimpact/btGenericPoolAllocator.o \
@@ -186,6 +186,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/physics/BulletDynamics/Character/btKinematicCharacterController.o \
 	${OBJECTDIR}/physics/BulletCollision/Gimpact/btContactProcessing.o \
 	${OBJECTDIR}/physics/BulletCollision/CollisionDispatch/btCollisionObject.o \
+	${OBJECTDIR}/widget3d/Rect.o \
 	${OBJECTDIR}/graph/Graph.o \
 	${OBJECTDIR}/objects/PointerPanel.o \
 	${OBJECTDIR}/physics/BulletCollision/BroadphaseCollision/btMultiSapBroadphase.o \
@@ -355,15 +356,15 @@ ${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btTriangleBuffer.o: nbproje
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btTriangleBuffer.o physics/BulletCollision/CollisionShapes/btTriangleBuffer.cpp
 
-${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btStridingMeshInterface.o: nbproject/Makefile-${CND_CONF}.mk physics/BulletCollision/CollisionShapes/btStridingMeshInterface.cpp 
-	${MKDIR} -p ${OBJECTDIR}/physics/BulletCollision/CollisionShapes
-	${RM} $@.d
-	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btStridingMeshInterface.o physics/BulletCollision/CollisionShapes/btStridingMeshInterface.cpp
-
 ${OBJECTDIR}/space/Humanoid.o: nbproject/Makefile-${CND_CONF}.mk space/Humanoid.cpp 
 	${MKDIR} -p ${OBJECTDIR}/space
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/space/Humanoid.o space/Humanoid.cpp
+
+${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btStridingMeshInterface.o: nbproject/Makefile-${CND_CONF}.mk physics/BulletCollision/CollisionShapes/btStridingMeshInterface.cpp 
+	${MKDIR} -p ${OBJECTDIR}/physics/BulletCollision/CollisionShapes
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btStridingMeshInterface.o physics/BulletCollision/CollisionShapes/btStridingMeshInterface.cpp
 
 ${OBJECTDIR}/widget2d/panel.o: nbproject/Makefile-${CND_CONF}.mk widget2d/panel.cpp 
 	${MKDIR} -p ${OBJECTDIR}/widget2d
@@ -1014,6 +1015,11 @@ ${OBJECTDIR}/physics/BulletCollision/CollisionDispatch/btCollisionObject.o: nbpr
 	${MKDIR} -p ${OBJECTDIR}/physics/BulletCollision/CollisionDispatch
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/physics/BulletCollision/CollisionDispatch/btCollisionObject.o physics/BulletCollision/CollisionDispatch/btCollisionObject.cpp
+
+${OBJECTDIR}/widget3d/Rect.o: nbproject/Makefile-${CND_CONF}.mk widget3d/Rect.cpp 
+	${MKDIR} -p ${OBJECTDIR}/widget3d
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/widget3d/Rect.o widget3d/Rect.cpp
 
 ${OBJECTDIR}/graph/Graph.o: nbproject/Makefile-${CND_CONF}.mk graph/Graph.cpp 
 	${MKDIR} -p ${OBJECTDIR}/graph

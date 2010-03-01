@@ -587,6 +587,8 @@
         <logicalFolder name="widget3d" displayName="widget3d" projectFiles="true">
           <itemPath>widget3d/Button.cpp</itemPath>
           <itemPath>widget3d/Button.h</itemPath>
+          <itemPath>widget3d/Rect.cpp</itemPath>
+          <itemPath>widget3d/Rect.h</itemPath>
           <itemPath>widget3d/TextRect.cpp</itemPath>
           <itemPath>widget3d/TextRect.h</itemPath>
         </logicalFolder>
@@ -630,8 +632,6 @@
             <linkerOptionItem>-lftgl</linkerOptionItem>
             <linkerOptionItem>-lGLU</linkerOptionItem>
             <linkerOptionItem>-lglut</linkerOptionItem>
-            <linkerOptionItem>-lopenal</linkerOptionItem>
-            <linkerOptionItem>-lalut</linkerOptionItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>

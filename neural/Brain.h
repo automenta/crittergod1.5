@@ -113,12 +113,12 @@ public:
         maxPlasticityWeaken = 0.99;
 
 
-        percentChanceConsistentSynapses = 0.50;
+        percentChanceConsistentSynapses = 0.10;
 
+        percentChancePlasticNeuron = 0.5;
 
         percentChanceOutputNeuron = 0.25;
 
-        percentChancePlasticNeuron = 0.50;
 
         percentChanceInputSynapse = 0.25;
 

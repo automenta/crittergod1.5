@@ -16,6 +16,8 @@
 
 class NeuralSignalsPanel : public Panel {
 
+
+public:
     vector<float>* input;
     float **v;
 
@@ -24,7 +26,6 @@ class NeuralSignalsPanel : public Panel {
 
     bool normalize;
 
-public:
     NeuralSignalsPanel(vector<float>* b, int _historySize) : Panel(), input(b), historySize(_historySize), normalize(true) {
         setSize(250, 200);
         setPosition(355, 355);
@@ -52,6 +53,13 @@ public:
     }
 
     void update() {
+        reinit();
+
+        if (numSignals < 0)
+            return;
+        if (historySize < 0)
+            return;
+
         unsigned numOuts = input->size();
 
         for (unsigned i = 0; i < numOuts; i++) {
@@ -63,17 +71,6 @@ public:
     }
 
     virtual void draw() {
-        reinit();
-
-        //Panel::draw();
-
-        if (numSignals < 0)
-            return;
-        if (historySize < 0)
-            return;
-
-
-
         update();     
 
         int hWidth = floor(float(width()) / float(historySize));
