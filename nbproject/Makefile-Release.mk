@@ -136,6 +136,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/video/Spacetime.o \
 	${OBJECTDIR}/physics/BulletDynamics/ConstraintSolver/btConeTwistConstraint.o \
 	${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btPolyhedralConvexShape.o \
+	${OBJECTDIR}/widget3d/WidgetPlane.o \
 	${OBJECTDIR}/physics/BulletCollision/Gimpact/btTriangleShapeEx.o \
 	${OBJECTDIR}/physics/BulletCollision/CollisionDispatch/btBoxBoxCollisionAlgorithm.o \
 	${OBJECTDIR}/physics/BulletCollision/NarrowPhaseCollision/btRaycastCallback.o \
@@ -192,6 +193,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/physics/BulletCollision/BroadphaseCollision/btMultiSapBroadphase.o \
 	${OBJECTDIR}/physics/BulletCollision/NarrowPhaseCollision/btVoronoiSimplexSolver.o \
 	${OBJECTDIR}/video/mousepicker.o \
+	${OBJECTDIR}/widget3d/Panel.o \
 	${OBJECTDIR}/physics/BulletSoftBody/btSoftRigidCollisionAlgorithm.o \
 	${OBJECTDIR}/physics/BulletDynamics/ConstraintSolver/btGeneric6DofSpringConstraint.o \
 	${OBJECTDIR}/physics/BulletCollision/NarrowPhaseCollision/btPersistentManifold.o \
@@ -766,6 +768,11 @@ ${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btPolyhedralConvexShape.o: 
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/physics/BulletCollision/CollisionShapes/btPolyhedralConvexShape.o physics/BulletCollision/CollisionShapes/btPolyhedralConvexShape.cpp
 
+${OBJECTDIR}/widget3d/WidgetPlane.o: nbproject/Makefile-${CND_CONF}.mk widget3d/WidgetPlane.cpp 
+	${MKDIR} -p ${OBJECTDIR}/widget3d
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/widget3d/WidgetPlane.o widget3d/WidgetPlane.cpp
+
 ${OBJECTDIR}/physics/BulletCollision/Gimpact/btTriangleShapeEx.o: nbproject/Makefile-${CND_CONF}.mk physics/BulletCollision/Gimpact/btTriangleShapeEx.cpp 
 	${MKDIR} -p ${OBJECTDIR}/physics/BulletCollision/Gimpact
 	${RM} $@.d
@@ -1045,6 +1052,11 @@ ${OBJECTDIR}/video/mousepicker.o: nbproject/Makefile-${CND_CONF}.mk video/mousep
 	${MKDIR} -p ${OBJECTDIR}/video
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/video/mousepicker.o video/mousepicker.cpp
+
+${OBJECTDIR}/widget3d/Panel.o: nbproject/Makefile-${CND_CONF}.mk widget3d/Panel.cpp 
+	${MKDIR} -p ${OBJECTDIR}/widget3d
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/widget3d/Panel.o widget3d/Panel.cpp
 
 ${OBJECTDIR}/physics/BulletSoftBody/btSoftRigidCollisionAlgorithm.o: nbproject/Makefile-${CND_CONF}.mk physics/BulletSoftBody/btSoftRigidCollisionAlgorithm.cpp 
 	${MKDIR} -p ${OBJECTDIR}/physics/BulletSoftBody

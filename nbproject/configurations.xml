@@ -587,10 +587,14 @@
         <logicalFolder name="widget3d" displayName="widget3d" projectFiles="true">
           <itemPath>widget3d/Button.cpp</itemPath>
           <itemPath>widget3d/Button.h</itemPath>
+          <itemPath>widget3d/Panel.cpp</itemPath>
+          <itemPath>widget3d/Panel.h</itemPath>
           <itemPath>widget3d/Rect.cpp</itemPath>
           <itemPath>widget3d/Rect.h</itemPath>
           <itemPath>widget3d/TextRect.cpp</itemPath>
           <itemPath>widget3d/TextRect.h</itemPath>
+          <itemPath>widget3d/WidgetPlane.cpp</itemPath>
+          <itemPath>widget3d/WidgetPlane.h</itemPath>
         </logicalFolder>
         <itemPath>RunSims.cpp</itemPath>
         <itemPath>RunSims.h</itemPath>
@@ -620,6 +624,7 @@
       </toolsSet>
       <compileType>
         <ccTool>
+          <developmentMode>5</developmentMode>
           <incDir>
             <pElem>physics</pElem>
           </incDir>

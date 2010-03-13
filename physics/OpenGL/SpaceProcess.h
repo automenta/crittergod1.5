@@ -46,7 +46,7 @@ class SpaceProcess
 	protected:
             int gPickingConstraintId;
             btVector3 gOldPickingPos;
-            btVector3 gHitPos;
+            btVector3 gHitPos, touchPosWorld, touchPosLocal;
             float gOldPickingDist;
             btRigidBody* pickedBody;//for deactivation state
             btScalar mousePickClamping;
@@ -75,8 +75,8 @@ class SpaceProcess
 	double cameraSpeed;
 
 	btVector3 rayForward;
-	int	m_mouseOldX;
-	int	m_mouseOldY;
+	int	pointerPixelX;
+	int	pointerPixelY;
 	int	m_mouseButtons;
 public:
 	///this is the most important class
@@ -206,6 +206,7 @@ public:
 	virtual void setShootBoxShape ();
 	virtual void	shootBox(const btVector3& destination);
 
+        btVector3* getBackgroundColor() { return &bgColor; }
 
 	btVector3	getRayTo(int x,int y);
 

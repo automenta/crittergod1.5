@@ -56,8 +56,8 @@ public:
 	float getInput() { return input; }
 
 	void setInput(float i) {
-            i = fmin(i, 1.0);
-            i = fmax(i, -1.0);
+            if (i > 1.0) i = 1.0;
+            if (i < -1.0)  i = -1.0;
             input = i;
 	}
         
@@ -78,6 +78,13 @@ public:
 		stimulationFactor = 0.1;
                 potentialDecay = 0.95;
 	}
+
+        void setStimulationFactor(double newStimulationFactor) {
+            stimulationFactor= newStimulationFactor;
+        }
+        void setDecay(double newDecay) {
+            potentialDecay = newDecay;
+        }
 
 	void reset() {
 		potential = 0;

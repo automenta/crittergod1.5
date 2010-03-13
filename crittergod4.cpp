@@ -12,9 +12,10 @@ int main(int argc, char** argv) {
 
 
     //runSim();
+    runSpiderLab();
 
     //runBrainDemo();
-    runBrain2Demo();
+    //runBrain2Demo();
     
     //runWidgets3D();
 

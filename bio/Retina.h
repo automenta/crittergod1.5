@@ -13,6 +13,7 @@
 #include "../physics/BulletDynamics/Dynamics/btDynamicsWorld.h"
 #include "../physics/BulletDynamics/Dynamics/btRigidBody.h"
 #include "../neural/NInput.h"
+#include "../neural/NOutput.h"
 
 #include "../physics/LinearMath/btQuaternion.h"
 #include "../physics/LinearMath/btTransform.h"
@@ -60,15 +61,13 @@ private:
     CastResult result;
 };
 
-class Retina : public NInput {
+class Retina : public NInput, public NOutput {
     btDefaultCollisionConfiguration* m_collisionConfiguration;
     btCollisionDispatcher* m_dispatcher;
     btAxisSweep3* m_overlappingPairCache;
     btCollisionWorld* m_collisionWorld;
 
     btVoronoiSimplexSolver simplexSolver;
-
-    float fov;
 
     btRigidBody* eyePart;
 
@@ -84,21 +83,19 @@ class Retina : public NInput {
 public:
     unsigned width, height;
     btVector4** pixel; //color array
-    btScalar** dist; //distance array
     unsigned timeScale;
 
     unsigned p; //vision frame count
     
     Retina(Brain* b, btDynamicsWorld *_world, btRigidBody* _eyePart, unsigned pixelWidth, unsigned pixelHeight, unsigned _timeScale /* double minframerate */)
-    : NInput(b, pixelWidth*pixelHeight * 4), world(_world), width(pixelWidth), height(pixelHeight), eyePart(_eyePart), timeScale(_timeScale) {
+    : NInput(b, pixelWidth*pixelHeight * 4),
+        NOutput(b, 1),
+       world(_world), width(pixelWidth), height(pixelHeight), eyePart(_eyePart), timeScale(_timeScale)
+       {
 
         p = 0;
 
-        visionDistance = 25.0;
-
-        retinaWidth = 0.5;
-        retinaHeight = 0.5;
-        fov = M_PI_2;
+        visionDistance = 50.0;
 
         rayCast = new Raycast(world);
 
@@ -106,23 +103,34 @@ public:
         for (unsigned j = 0; j < pixelWidth; j++) {
             pixel[j] = new btVector4[pixelHeight];
         }
-        dist = new btScalar*[pixelWidth];
-        for (unsigned j = 0; j < pixelWidth; j++) {
-            dist[j] = new btScalar[pixelHeight];
-        }
+//        dist = new btScalar*[pixelWidth];
+//        for (unsigned j = 0; j < pixelWidth; j++) {
+//            dist[j] = new btScalar[pixelHeight];
+//        }
     }
 
     virtual void process(double dt) {
         btTransform tr = eyePart->getWorldTransform();
 
-        unsigned input = 0, x, y;
+        unsigned input = 0, x;
 
 
+        float focus = outs[0]->getOutput();
+        float vDistance = (visionDistance/2.0) * (1.0 + focus);
+        
+        if (width > height) {
+            retinaWidth = vDistance;
+            retinaHeight = vDistance * (float(height) / float(width));
+        }
+        else {
+            retinaHeight = vDistance;
+            retinaWidth = vDistance * (float(width) / float(height));
+        }
 
-        #pragma omp parallel for private(x,y)
+        #pragma omp parallel for private(x)
         for (x = 0; x < width; x++) {
             unsigned ip = (p++)%(timeScale);
-            for (y = 0; y < height; y++) {
+            for (unsigned y = 0; y < height; y++) {
                 if (ip++ % timeScale != 0) {
                     input+=4;
                     continue;
@@ -144,58 +152,73 @@ public:
 
                 btVector3 hor = forwardRay.cross(upRay);
                 hor.normalize();
-                hor *= visionDistance;
+                hor *= vDistance;
 
                 upRay = hor.cross(forwardRay);
                 upRay.normalize();
-                upRay *= visionDistance;
+                upRay *= vDistance;
 
                 btVector3 to = (tr.getOrigin() + forwardRay) - (0.5f * hor) + (0.5f * upRay);
                 to += x * (hor * (1.0f / (retinaWidth)));
                 to -= y * (upRay * (1.0f / (retinaHeight)));
 
+                double dist;
                 CastResult r = rayCast->cast(from, to);
                 if (r.hit) {
                     btScalar d = r.hitPosition.distance(from);
-                    dist[x][y] = d;
-
-                    pixel[x][y] = getColor(r, d);
+                    //dist[x][y] = d;
+                    dist = d;
+                    pixel[x][y] = getColor(r, d, vDistance);
                 } else {
-                    dist[x][y] = visionDistance;
+                    //dist[x][y] = vDistance;
+                    dist = vDistance;
                     pixel[x][y] = btVector4(-0.5, -0.5, -0.5, 0);
                 }
 
                 
-                double vd = dist[x][y] / visionDistance;
+                double vd = dist / vDistance;
 
-                ins[input++]->setInput( pixel[x][y].getX()*vd );
-                ins[input++]->setInput( pixel[x][y].getY()*vd );
-                ins[input++]->setInput( pixel[x][y].getZ()*vd );
+                btVector3* cp = &(pixel[x][y]);
+
+                ins[input++]->setInput( cp->getX()*vd );
+                ins[input++]->setInput( cp->getY()*vd );
+                ins[input++]->setInput( cp->getZ()*vd );
                 ins[input++]->setInput( 2*(vd)-1.0 );
 
             }
         }
     }
 
-    virtual btVector4 getColor(CastResult res, btScalar d) {
-        double pd = (1.0 - (d/visionDistance));
+    virtual btVector4 getColor(CastResult res, btScalar d, float vDistance) {
+        double pd = (1.0 - (d/vDistance));
         btCollisionObject* c = res.hitBody;
         float r, g, b;
+        
 
-        switch (((long)c) % 3) {
+        switch ((((long)c)^2347) % 5) {
             case 0:
                 r = 1.0;
                 g = 0.5;
                 b = 0.25;
                 break;
             case 1:
-                b = 1.0;
-                g = 0.5;
                 r = 0.25;
+                g = 0.5;
+                b = 1.0;
                 break;
             case 2:
+                r = 0.25;
                 g = 1.0;
                 b = 0.5;
+                break;
+            case 3:
+                g = 0.5;
+                r = 0.25;
+                b = 1.0;
+                break;
+            case 4:
+                b = 0.5;
+                g = 1.0;
                 r = 0.25;
                 break;
         }
@@ -208,10 +231,10 @@ public:
 
         for (unsigned j = 0; j < width; j++) {
             delete pixel[j];
-            delete dist[j];
+            //delete dist[j];
         }
         delete pixel;
-        delete dist;
+        //delete dist;
         delete rayCast;
 
     }

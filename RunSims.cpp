@@ -42,6 +42,7 @@ using namespace std;
 #include "widget2d/button.h"
 #include "widget2d/text.h"
 
+#include "widget3d/Panel.h"
 #include "widget3d/Rect.h"
 #include "widget3d/TextRect.h"
 
@@ -80,7 +81,7 @@ void runSim() {
 
 
     {
-        ds->addGround(50, 50, 5, 0, -10, 0);
+        ds->addGround(50, 5, 50, 0, -10, 0);
 
         for (unsigned i = 2; i < 5; i++) {
             SnakeBody* snake1 = new SnakeBody(btVector3(0, 0, 0), i * 2);
@@ -243,45 +244,6 @@ void runHumanoid() {
 
 }
 
-void runWidgets3D() {
-    Audio* audio = new Audio();
-    DefaultSpace* ds = new DefaultSpace(audio);
-
-    //ds->addGround(50, 50, 5);
-
-    BoxBody* bc = new BoxBody(new btVector3(0, 0.5, 0.25), new btVector3(6, 4, 0.1));
-    bc->front()->push_back(new TextRect("Xyz", 0.85, 0.45));
-    ds->addBody(bc);
-
-    BoxBody* bb = new BoxBody(new btVector3(7, 4, 1.0), new btVector3(6, 4, 0.1));
-    bb->front()->push_back(new TextRect("Abcdefg", 0.3, 0.3));
-    ds->addBody(bb);
-
-    BoxBody* ba = new BoxBody(new btVector3(0, 0, 0.5), new btVector3(3, 2, 0.1));
-    {
-        Rect* r1 = new Rect(-0.5, -0.5, 0, 0.2, 0.2);
-        *(r1->fillColor) = btVector3(0, 1, 0);
-        ba->front()->push_back(r1);
-
-        Rect* r2 = new Rect(0.5, -0.5, 0, 0.2, 0.2);
-        *(r2->fillColor) = btVector3(0, 0, 1);
-        ba->front()->push_back(r2);
-
-        Rect* r3 = new Rect(0.5, 0.5, 0, 0.2, 0.2);
-        *(r3->fillColor) = btVector3(1, 0, 0);
-        ba->front()->push_back(r3);
-
-        Rect* r4 = new Rect(-0.5, 0.5, 0, 0.2, 0.2);
-        ba->front()->push_back(r4);
-
-    }
-    ds->addBody(ba);
-
-
-    runGLWindow(0, NULL, 1024, 800, VERSION, ds);
-
-}
-
 class SignalGeneratorBox : public BoxBody {
     NeuralSignalsPanel *nsp;
 
@@ -382,6 +344,99 @@ public:
     }
 };
 
+class TouchReactiveBox : public PanelBody {
+    btVector3 touchPos;
+    Rect * r;
+public:
+
+    TouchReactiveBox(btVector3* pos, btVector3 *size) : PanelBody(pos, size) {
+        r = new Rect();
+        front()->push_back(r);
+    }
+
+    virtual void onTouch(btVector3 *touchPosWorld, btVector3* touchPosLocal) {
+        touchPos = *touchPosLocal;
+        *(r->pos) = btVector3(touchPos.getX() / size->getX() / 2.0, touchPos.getY() / size->getY() / 2.0, -0.5);
+        *(r->size) = btVector3(0.1, 0.1, 1.0);
+    }
+
+};
+
+void runWidgets3D() {
+    Audio* audio = new Audio();
+    DefaultSpace* ds = new DefaultSpace(audio);
+
+    *(ds->getBackgroundColor()) = btVector3(0.2, 0.2, 0.2);
+    //ds->addGround(50, 50, 5);
+
+    PanelBody* bc = new PanelBody(new btVector3(0, 0.5, 0.25), new btVector3(6, 4, 0.1));
+    {
+        TextRect* ul = new TextRect("BL");
+        ul->span(-0.5, -0.5, -0.2, -0.2);
+        bc->front()->push_back(ul);
+
+        TextRect * br = new TextRect("UR");
+        br->span(0.5, 0.5, 0.2, 0.2);
+        bc->front()->push_back(br);
+
+        TextRect * ur = new TextRect("UL");
+        ur->span(-0.5, 0.5, -0.35, 0.35);
+        bc->front()->push_back(ur);
+
+        Rect* r1 = new Rect(0.5, -0.5, 0, 0.15, 0.15);
+        *(r1->fillColor) = btVector3(0, 1, 0);
+        bc->front()->push_back(r1);
+
+    }
+    ds->addBody(bc);
+
+    for (int i = 0; i < 5; i++) {
+        PanelBody* bb = new PanelBody(new btVector3(0, 0, 1.0), new btVector3(2, 1, 0.1));
+        bb->front()->push_back(new TextRect("!@#$%", 0.3, 0.3));
+        ds->addBody(bb);
+    }
+
+    PanelBody* ba = new PanelBody(new btVector3(0, 0, 0.5), new btVector3(3, 2, 0.1));
+    {
+        float d = 0.0;
+
+        Rect* r1 = new Rect(-0.5, -0.5, d, 0.2, 0.2);
+        *(r1->fillColor) = btVector3(0, 1, 0);
+        ba->front()->push_back(r1);
+
+        Rect* r2 = new Rect(0.5, -0.5, d, 0.2, 0.2);
+        *(r2->fillColor) = btVector3(0, 0, 1);
+        ba->front()->push_back(r2);
+
+        Rect* r3 = new Rect(0.5, 0.5, d, 0.2, 0.2);
+        *(r3->fillColor) = btVector3(1, 0, 0);
+        ba->front()->push_back(r3);
+
+        Rect* r4 = new Rect(-0.5, 0.5, d, 0.2, 0.2);
+        ba->front()->push_back(r4);
+
+    }
+    ds->addBody(ba);
+
+    TouchReactiveBox* trb = new TouchReactiveBox(new btVector3(-4, -4, -4), new btVector3(3, 3, 0.2));
+    ds->addBody(trb);
+
+    //    {
+    //        Humanoid* h = new Humanoid(btVector3(0, 8, 0));
+    //        ds->addBody(h);
+    //
+    //        RetinaPanel* rp2 = new RetinaPanel(h->lhRetina);
+    //        ds->getFace()->addPanel("lhRetina", rp2);
+    //        rp2->setSize(150, 150);
+    //        rp2->setPosition(600, 600);
+    //
+    //    }
+
+
+    runGLWindow(0, NULL, 1024, 800, VERSION, ds);
+
+}
+
 void runBrain2Demo() {
     Brain* b = new Brain(1, 2, 128, 8, 16, 0.5);
     b->printSummary();
@@ -420,5 +475,56 @@ void runBrain2Demo() {
 
 
     runGLWindow(0, NULL, 1024, 800, VERSION, ds);
+
+}
+
+void runSpiderLab() {
+    Audio* audio = new Audio();
+
+    DefaultSpace* ds = new DefaultSpace(audio);
+
+    ds->addGround(15, 1, 15, 0, -10, 0);
+
+    int numLegs = 3;
+    vector<btScalar>* legLengths = new vector<btScalar> ();
+    legLengths->push_back(0.6);
+cd app    legLengths->push_back(0.3);
+    legLengths->push_back(0.2);
+    legLengths->push_back(0.1);
+    SpiderBody2* spider = new SpiderBody2(numLegs, legLengths, btVector3(0, 10, 0));
+    ds->addBody(spider);
+
+    for (unsigned l = 0; l < numLegs; l++) {
+        RetinaPanel* rp = new RetinaPanel(spider->legEye[l]);
+        string panelName = "retina_";
+        panelName[5] = 'a' + l;
+        ds->getFace()->addPanel(panelName, rp);
+
+        int w = 100;
+        rp->setSize(w, w);
+        rp->setPosition(w * l, 300);
+    }
+
+
+    //add rocks
+    float rw = 10;
+    float rh = 10;
+    float rx = 0.3;
+    float ry = 0.15;
+    float rz = 0.3;
+    for (float x = -rw; x < rw; x+=4.0) {
+        for (float y = -rh; y < rh; y+=4.0) {
+            ds->addBody(new BoxBody(new btVector3(x, 0.0, y), new btVector3(rx, ry, rz)));
+        }
+    }
+
+    BrainOutsPanel bop(spider->brain, 100);
+    ds->getFace()->addPanel("brainOuts", &bop);
+    bop.setPosition(800, 600);
+    bop.setSize(100, 600);
+
+    runGLWindow(0, NULL, 1024, 800, VERSION, ds);
+
+    delete audio;
 
 }

@@ -7,14 +7,6 @@
 
 #include "TextRect.h"
 
-TextRect::TextRect() {
-}
-
-TextRect::TextRect(const TextRect& orig) {
-}
-
-TextRect::~TextRect() {
-}
 
 //        //draw font
 //	{

@@ -18,10 +18,11 @@ class TextRect : public Rect {
 public:
     string text;
 
-    TextRect(const char* _text, float w, float h)  {
+
+    TextRect(const char* _text, float w=1.0, float h=1.0)  {
         Rect();
         text = _text;
-        this->pos = new btVector3(-0.5,0,0);
+        this->pos = new btVector3(0,0,0);
         this->size = new btVector3(w, h, 1.0);
         this->fillColor = NULL;
     }

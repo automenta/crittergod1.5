@@ -60,6 +60,8 @@ public:
     virtual void process(float deltaTime) {
     }
 
+    virtual void onTouch(btVector3 *touchPosWorld, btVector3* touchPosLocal) { }
+
     int indexOfPart(btRigidBody* part) {
         for (unsigned i = 0; i < bodies.size(); i++) {
             if (bodies[i] == part)

@@ -101,7 +101,7 @@ public:
 
             createJoint(c);
 
-            neckMotor = new SixDoFMotor(brain, c);
+            neckMotor = new SixDoFMotor(brain, c, 0.001, M_PI_4, 0.1, 0.1);
         }
 
 
@@ -137,7 +137,7 @@ public:
                 c->setAngularUpperLimit(btVector3(sideToSideTilt, sideToSideRoll, forwardTilt));
 
                 createJoint(c);
-                leftShoulderMotor = new SixDoFMotor(brain, c);
+                leftShoulderMotor = new SixDoFMotor(brain, c, 0.001, M_PI_4, 0.1, 0.1);
             }
             {
 
@@ -152,7 +152,7 @@ public:
                 c->setAngularUpperLimit(btVector3(sideToSideTilt, sideToSideRoll, forwardTilt));
 
                 createJoint(c);
-                rightShoulderMotor = new SixDoFMotor(brain, c);
+                rightShoulderMotor = new SixDoFMotor(brain, c, 0.001, M_PI_4, 0.1, 0.1);
             }
 
 
@@ -173,7 +173,7 @@ public:
 
                 createJoint(c2);
 
-                leftElbowMotor = new SixDoFMotor(brain, c2);
+                leftElbowMotor = new SixDoFMotor(brain, c2, 0.001, M_PI_4, 0.1, 0.1);
 
                 btRigidBody* lhEye = createRigidShape(1.0, t, new btBoxShape(btVector3(0.05, 0.2, 0.2)));
                 {
@@ -212,7 +212,7 @@ public:
 
                 createJoint(c2);
 
-                rightElbowMotor = new SixDoFMotor(brain, c2);
+                rightElbowMotor = new SixDoFMotor(brain, c2, 0.001, M_PI_4, 0.1, 0.1);
             }
         }
 

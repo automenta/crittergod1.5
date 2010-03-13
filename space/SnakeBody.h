@@ -177,7 +177,7 @@ public:
             joints[joint++] = c;
             dyn->addConstraint(c);
 
-            SixDoFMotor* sm = new SixDoFMotor(brain, c);
+            SixDoFMotor* sm = new SixDoFMotor(brain, c, 0.001, M_PI_4, 0.1, 0.1);
             jointControllers.push_back(sm);
 
             //			// hip joints
@@ -253,8 +253,8 @@ public:
     }
 
     virtual void process(btScalar dt) {
-        posHead->set(bodies[0]->getCenterOfMassPosition(), 0.1);
-        posTail->set(bodies[segments - 1]->getCenterOfMassPosition(), 0.1);
+        posHead->setSin(bodies[0]->getCenterOfMassPosition(), 0.1);
+        posTail->setSin(bodies[segments - 1]->getCenterOfMassPosition(), 0.1);
         posHead->process(dt);
         posTail->process(dt);
 

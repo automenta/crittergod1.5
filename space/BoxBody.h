@@ -30,6 +30,7 @@ public:
     btVector3* position;
     btVector3* size;
     list<Rect*> frontRects;
+    btRigidBody* rb;
 
     BoxBody(btVector3* _position, btVector3* _size) : AbstractBody(), position(_position), size(_size) {
 
@@ -40,7 +41,7 @@ public:
         transform.setIdentity();
         transform.setOrigin(*position);
 
-        btRigidBody* rb = createRigidShape(btScalar(1.), transform, new btBoxShape(*size));
+        rb = createRigidShape(btScalar(1.), transform, new btBoxShape(*size));
         rb->setDamping(0.8, 0.8);
 
 
@@ -72,10 +73,12 @@ public:
     }
 
     virtual void drawFront() {
-        glPushMatrix();
-        glScalef(size->getX()*2.0, size->getY()*2.0, 1.0);
+        float sx = size->getX()*2.0;
+        float sy = size->getY()*2.0;
+        float sz = size->getZ()*2.0;
 
         for (RectList::const_iterator ri = frontRects.begin(); ri != frontRects.end(); ++ri) {
+            glPushMatrix();
             Rect *r = (*ri);
 
             btVector3* rpos = r->pos;
@@ -83,37 +86,62 @@ public:
 
             float d = 0.1;
 
+            //glScalef(0.5 * rsize->getX() * sx, 0.5 * rsize->getY() * sy, 1.0 / 2.0);
+            //glTranslatef(-0.5 + rpos->getX()*sx, -0.5 + rpos->getY()*sy, -d * 3);
+
+            float x1 = (rpos->getX() - rsize->getX()) * sx;
+            float x2 = (rpos->getX() + rsize->getX()) * sx;
+            float y1 = (rpos->getY() - rsize->getY()) * sy;
+            float y2 = (rpos->getY() + rsize->getY()) * sy;
+            float xw = fabs(x2 - x1);
+            float yh = fabs(y2 - y1);
+            float z = (rpos->getZ() + 1.0)* sz;
+            
             btVector3* bgColor = r->fillColor;
 
 
             if (bgColor != NULL) {
                 glBegin(GL_QUADS);
                 glColor4f(bgColor->getX(), bgColor->getY(), bgColor->getZ(), 1.0);
-                glVertex3f(rpos->getX() - rsize->getX() / 2.0, rpos->getY() - rsize->getY() / 2.0, -rpos->getZ() - d);
-                glVertex3f(rpos->getX() - rsize->getX() / 2.0, rpos->getY() + rsize->getY() / 2.0, -rpos->getZ() - d);
-                glVertex3f(rpos->getX() + rsize->getX() / 2.0, rpos->getY() + rsize->getY() / 2.0, -rpos->getZ() - d);
-                glVertex3f(rpos->getX() + rsize->getX() / 2.0, rpos->getY() - rsize->getY() / 2.0, -rpos->getZ() - d);
+
+                glVertex3f(x2, y1, z + d);
+                glVertex3f(x2, y2, z + d);
+                glVertex3f(x1, y2, z + d);
+                glVertex3f(x1, y1, z + d);
+
                 glEnd();
             }
 
             TextRect* tr = dynamic_cast<TextRect*> (r);
             if (tr != NULL) {
+                glBegin(GL_QUADS);
+                glColor4f(0.2,0,0, 1.0);
+                glVertex3f(x2, y1, z + d);
+                glVertex3f(x2, y2, z + d);
+                glVertex3f(x1, y2, z + d);
+                glVertex3f(x1, y1, z + d);
+                glEnd();
+
                 glPushMatrix();
                 //glMaterialfv(GL_FRONT, GL_AMBIENT, front_ambient);
                 //glColorMaterial(GL_FRONT, GL_DIFFUSE);
                 //glEnable(GL_TEXTURE);
 
-                glScalef(-1.0 / 2.0 * rsize->getX(), 1.0 / 2.0 * rsize->getY(), 1.0 / 2.0);
-                glTranslatef(-1.0 + (rpos->getX())*2.0, 0.0 + (rpos->getY())*2.0, -d * 3);
+                FTBBox b = font->BBox(tr->text.c_str());
+                float cw = fabs(b.Upper().X() - b.Lower().X()) / rsize->getX();
+                float ch = fabs(b.Upper().Y() - b.Lower().Y()) / rsize->getY();
+                glTranslatef((x1+x2)/2.0 - sx/cw/2.0, (y1+y2)/2.0, (rpos->getZ() + 1.0)* sz + d*2);
+                glScalef(1*sx/cw, 1*sy/ch, 1);
+
                 glColor4f(1.0, 1.0, 1.0, 1.0);
                 font->Render(tr->text.c_str());
                 glPopMatrix();
 
             }
 
+            glPopMatrix();
         }
 
-        glPopMatrix();
     }
 
     virtual void draw() {
