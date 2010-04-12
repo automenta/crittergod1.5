@@ -29,7 +29,7 @@ public:
 
 	virtual void swapBuffers();
 
-	virtual	void	updateModifierKeys();
+	virtual	void updateModifierKeys();
 
 	virtual void renderscene(int pass);
 

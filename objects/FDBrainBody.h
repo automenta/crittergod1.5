@@ -28,19 +28,27 @@ class FDBrainBody : public AbstractBody {
     map<AbstractNeuron*, btRigidBody*> neuronToBody;
     map<btCollisionShape*, AbstractNeuron*> shapeToNeuron;
 
+    btVector3 minXYZ, maxXYZ;
 
 public:
+    bool center;
     float naturalLength;
     float repulsion;
     float tension;
     float speed;
+    float neuronSize;
 
-    FDBrainBody(Brain* b) : brain(b) {
+    FDBrainBody(Brain* b, float w, float h, float d) : brain(b) {
 
-        naturalLength = 7.5;
+        minXYZ = btVector3(-w/2.0, -h/2.0, -d/2.0);
+        maxXYZ = btVector3(w/2.0, h/2.0, d/2.0);
+
+        naturalLength = 12.0;
         repulsion = 0.0;
         tension = 0.1;
         speed = 0.1;
+        neuronSize = 0.5;
+        center = true;
     }
 
     virtual void init() {
@@ -67,7 +75,8 @@ public:
                 neuronShape[i] = new btBoxShape(btVector3(1.0, 1.0, 1.0));
 
             shapeToNeuron[neuronShape[i]] = n;
-            neuronToBody[n] = bodies[i] = neuronBody[i] = createRigidShape(btScalar(1.), transform, neuronShape[i]);
+            neuronToBody[n] = bodies[i] = neuronBody[i] = createRigidShape(btScalar(0.1), transform, neuronShape[i]);
+            bodies[i]->setGravity( btVector3(0,0,0) );
         }
 
     }
@@ -105,9 +114,9 @@ public:
         //update shape sizes
         for (unsigned i = 0; i < numNeurons; i++) {
             btCollisionShape* bt = neuronShape[i];
-            float s = 0.5;
+            float s = neuronSize;
             float w = s * (1.0 + (fabs(brain->neurons[i]->getOutput())));
-            float h = s * (1.0 + (fabs(brain->neurons[i]->potential)));
+            float h = s * (1.0 + sqrt(fabs(brain->neurons[i]->potential)));
             bt->setLocalScaling(btVector3(w, h, (w + h) / 2.0));
         }
 
@@ -115,7 +124,7 @@ public:
         btVector3 center(0, 0, 0);
 
         unsigned i;
-#pragma omp parallel for private(i)
+        #pragma omp parallel for private(i)
         for (i = 0; i < brain->numNeurons; i++) {
             Neuron* a = brain->neurons[i];
             btRigidBody *aBod = neuronBody[i];
@@ -135,7 +144,7 @@ public:
                 btVector3 bPos = bBod->getWorldTransform().getOrigin();
 
                 float currentLength = aPos.distance(bPos);
-                float targetLength = naturalLength / (1.0 + (fabs(syn->weight)*8));
+                float targetLength = neuronSize * naturalLength * (2.0 - fabs(syn->weight)); // / (1.0 + fabs(syn->weight));
                 float f = tension * (currentLength - targetLength)/* / ((float) numSynapses)*/;
 
                 float sx = f * (bPos.getX() - aPos.getX());
@@ -184,6 +193,11 @@ public:
 
                 aPos += force * speed;
             }
+
+            aPos[0] = fmax(fmin(aPos[0], maxXYZ[0]), minXYZ[0]);
+            aPos[1] = fmax(fmin(aPos[1], maxXYZ[1]), minXYZ[1]);
+            aPos[2] = fmax(fmin(aPos[2], maxXYZ[2]), minXYZ[2]);
+            
             aBod->getWorldTransform().setOrigin(aPos);
 
             center += aPos;
@@ -191,11 +205,13 @@ public:
 
         center /= ((double) brain->numNeurons);
 
-#pragma omp parallel for private(i)
-        for (i = 0; i < brain->numNeurons; i++) {
-            btRigidBody *aBod = neuronBody[i];
-            btVector3 pos = aBod->getWorldTransform().getOrigin();
-            aBod->getWorldTransform().setOrigin(pos - center);
+        if (center) {
+            #pragma omp parallel for private(i)
+            for (i = 0; i < brain->numNeurons; i++) {
+                btRigidBody *aBod = neuronBody[i];
+                btVector3 pos = aBod->getWorldTransform().getOrigin();
+                aBod->getWorldTransform().setOrigin(pos - center);
+            }
         }
 
 
@@ -232,7 +248,7 @@ public:
                 //double bby = bBod->getOrientation().getAxis().getY();
 
                 float w = syn->weight;
-                float input = 0.5 + 0.5 * fmin(fabs(a->potential), 1.0);
+                float input = neuronSize * (0.5 + 0.5 * fmin(fabs(a->potential), 1.0));
                 float cr, cg, cb, ca;
                 if (w < 0) {
                     cr = fmin(0.5 + -w/2.0, 1.0);

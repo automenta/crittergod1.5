@@ -15,8 +15,6 @@ subject to the following restrictions:
 #ifndef GL_SHAPE_DRAWER_H
 #define GL_SHAPE_DRAWER_H
 
-#include <FTGL/ftgl.h>
-
 class btCollisionShape;
 class btShapeHull;
 #include "LinearMath/btAlignedObjectArray.h"
@@ -42,9 +40,7 @@ protected:
 	bool								m_textureinitialized;
 	
 
-	ShapeCache*							cache(btConvexShape*);
-
-        FTFont *font;
+	ShapeCache*							cache(btConvexShape*);       
 
 public:
 		GL_ShapeDrawer();
@@ -52,7 +48,7 @@ public:
 		virtual ~GL_ShapeDrawer();
 
 		///drawOpenGL might allocate temporary memoty, stores pointer in shape userpointer
-		virtual void		drawOpenGL(btScalar* m, const btCollisionShape* shape, const btVector3& color,int	debugMode,const btVector3& worldBoundsMin,const btVector3& worldBoundsMax);
+		virtual void		drawOpenGL(btScalar* m, const btCollisionShape* shape, void* object, const btVector3& color,int	debugMode,const btVector3& worldBoundsMin,const btVector3& worldBoundsMax);
 		virtual void		drawShadow(btScalar* m, const btVector3& extrusion,const btCollisionShape* shape,const btVector3& worldBoundsMin,const btVector3& worldBoundsMax);
 		
 		bool		enableTexture(bool enable) { bool p=m_textureenabled;m_textureenabled=enable;return(p); }

@@ -12,7 +12,11 @@ int main(int argc, char** argv) {
 
 
     //runSim();
-    runSpiderLab();
+    //runSpiderLab();
+
+    runSpiderWithBrains();
+
+    //runMultiSpiders();
 
     //runBrainDemo();
     //runBrain2Demo();

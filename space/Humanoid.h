@@ -77,7 +77,7 @@ public:
 
         }
 
-        eyeRetina = new Retina(brain, space->dynamicsWorld, eye, 32, 24, 3);
+        eyeRetina = new Retina(brain, space->dynamicsWorld, eye, 32, 24, 0.33, 50.0);
 
         {
             //neck joint: torso->head
@@ -195,7 +195,7 @@ public:
 
                 }
 
-                lhRetina = new Retina(brain, space->dynamicsWorld, lhEye, 16, 8, 7);
+                lhRetina = new Retina(brain, space->dynamicsWorld, lhEye, 16, 8, 0.25, 50.0);
 
             }
 

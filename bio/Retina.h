@@ -79,6 +79,7 @@ class Retina : public NInput, public NOutput {
     Raycast* rayCast;
 
     double visionDistance;
+    float proportionFired;
 
 public:
     unsigned width, height;
@@ -86,16 +87,13 @@ public:
     unsigned timeScale;
 
     unsigned p; //vision frame count
-    
-    Retina(Brain* b, btDynamicsWorld *_world, btRigidBody* _eyePart, unsigned pixelWidth, unsigned pixelHeight, unsigned _timeScale /* double minframerate */)
+
+    Retina(Brain* b, btDynamicsWorld *_world, btRigidBody* _eyePart, unsigned pixelWidth, unsigned pixelHeight, float _proportionFired, float _visionDistance /* double minframerate */)
     : NInput(b, pixelWidth*pixelHeight * 4),
-        NOutput(b, 1),
-       world(_world), width(pixelWidth), height(pixelHeight), eyePart(_eyePart), timeScale(_timeScale)
-       {
+    NOutput(b, 1),
+    world(_world), width(pixelWidth), height(pixelHeight), eyePart(_eyePart), proportionFired(_proportionFired), visionDistance(_visionDistance) {
 
         p = 0;
-
-        visionDistance = 50.0;
 
         rayCast = new Raycast(world);
 
@@ -103,10 +101,10 @@ public:
         for (unsigned j = 0; j < pixelWidth; j++) {
             pixel[j] = new btVector4[pixelHeight];
         }
-//        dist = new btScalar*[pixelWidth];
-//        for (unsigned j = 0; j < pixelWidth; j++) {
-//            dist[j] = new btScalar[pixelHeight];
-//        }
+        //        dist = new btScalar*[pixelWidth];
+        //        for (unsigned j = 0; j < pixelWidth; j++) {
+        //            dist[j] = new btScalar[pixelHeight];
+        //        }
     }
 
     virtual void process(double dt) {
@@ -116,86 +114,102 @@ public:
 
 
         float focus = outs[0]->getOutput();
-        float vDistance = (visionDistance/2.0) * (1.0 + focus);
-        
+        float vDistance = (visionDistance / 2.0) * (1.0 + focus);
+
         if (width > height) {
             retinaWidth = vDistance;
             retinaHeight = vDistance * (float(height) / float(width));
-        }
-        else {
+        } else {
             retinaHeight = vDistance;
             retinaWidth = vDistance * (float(width) / float(height));
         }
 
         #pragma omp parallel for private(x)
         for (x = 0; x < width; x++) {
-            unsigned ip = (p++)%(timeScale);
+            unsigned ip = (p++) % (timeScale);
             for (unsigned y = 0; y < height; y++) {
-                if (ip++ % timeScale != 0) {
-                    input+=4;
-                    continue;
-                }
-
-                btVector3 from = eyePart->getWorldTransform().getOrigin();
-
-                btVector3 forwardRay(
-                        -tr.getBasis()[0][2],
-                        -tr.getBasis()[1][2],
-                        -tr.getBasis()[2][2]);
-
-                forwardRay *= visionDistance;
-
-                btVector3 upRay(
-                        tr.getBasis()[0][1],
-                        tr.getBasis()[1][1],
-                        tr.getBasis()[2][1]);
-
-                btVector3 hor = forwardRay.cross(upRay);
-                hor.normalize();
-                hor *= vDistance;
-
-                upRay = hor.cross(forwardRay);
-                upRay.normalize();
-                upRay *= vDistance;
-
-                btVector3 to = (tr.getOrigin() + forwardRay) - (0.5f * hor) + (0.5f * upRay);
-                to += x * (hor * (1.0f / (retinaWidth)));
-                to -= y * (upRay * (1.0f / (retinaHeight)));
-
                 double dist;
-                CastResult r = rayCast->cast(from, to);
-                if (r.hit) {
-                    btScalar d = r.hitPosition.distance(from);
-                    //dist[x][y] = d;
-                    dist = d;
-                    pixel[x][y] = getColor(r, d, vDistance);
+
+                if (!(frand(0, 1.0) <= proportionFired)) {
+                    if (x > 0)
+                        if ( y > 0)
+                            if (x < width-1)
+                                if (y < height-1) {
+                                    //anti-alias
+                                    float r = pixel[x-1][y].getX() + pixel[x+1][y].getX() + pixel[x][y-1].getX() + pixel[x][y+1].getX() + pixel[x-1][y-1].getX() + pixel[x+1][y+1].getX() + pixel[x-1][y-1].getX() + pixel[x+1][y+1].getX();
+                                    float g = pixel[x-1][y].getY() + pixel[x+1][y].getY() + pixel[x][y-1].getY() + pixel[x][y+1].getY() + pixel[x-1][y-1].getY() + pixel[x+1][y+1].getY() + pixel[x-1][y-1].getY() + pixel[x+1][y+1].getY();
+                                    float b = pixel[x-1][y].getZ() + pixel[x+1][y].getZ() + pixel[x][y-1].getZ() + pixel[x][y+1].getZ() + pixel[x-1][y-1].getZ() + pixel[x+1][y+1].getZ() + pixel[x-1][y-1].getZ() + pixel[x+1][y+1].getZ();
+                                    r/=8.0;
+                                    g/=8.0;
+                                    b/=8.0;
+                                    pixel[x][y] = btVector4(r, g, b, 1.0);
+                                }
+                    continue;
                 } else {
-                    //dist[x][y] = vDistance;
-                    dist = vDistance;
-                    pixel[x][y] = btVector4(-0.5, -0.5, -0.5, 0);
+                    btVector3 from = eyePart->getWorldTransform().getOrigin();
+
+                    btVector3 forwardRay(
+                            -tr.getBasis()[0][2],
+                            -tr.getBasis()[1][2],
+                            -tr.getBasis()[2][2]);
+
+                    forwardRay *= visionDistance;
+
+                    btVector3 upRay(
+                            tr.getBasis()[0][1],
+                            tr.getBasis()[1][1],
+                            tr.getBasis()[2][1]);
+
+                    btVector3 hor = forwardRay.cross(upRay);
+                    hor.normalize();
+                    hor *= vDistance;
+
+                    upRay = hor.cross(forwardRay);
+                    upRay.normalize();
+                    upRay *= vDistance;
+
+                    btVector3 to = (tr.getOrigin() + forwardRay) - (0.5f * hor) + (0.5f * upRay);
+                    to += x * (hor * (1.0f / (retinaWidth)));
+                    to -= y * (upRay * (1.0f / (retinaHeight)));
+
+                    CastResult r = rayCast->cast(from, to);
+                    if (r.hit) {
+                        btScalar d = r.hitPosition.distance(from);
+                        //dist[x][y] = d;
+                        dist = d;
+                        pixel[x][y] = getColor(r, d, vDistance);
+                    } else {
+                        //dist[x][y] = vDistance;
+                        dist = vDistance;
+                        pixel[x][y] = btVector4(-0.5, -0.5, -0.5, 0);
+                    }
+
                 }
 
-                
+
+
                 double vd = dist / vDistance;
 
                 btVector3* cp = &(pixel[x][y]);
 
-                ins[input++]->setInput( cp->getX()*vd );
-                ins[input++]->setInput( cp->getY()*vd );
-                ins[input++]->setInput( cp->getZ()*vd );
-                ins[input++]->setInput( 2*(vd)-1.0 );
+                ins[input++]->setInput(cp->getX() * vd);
+                ins[input++]->setInput(cp->getY() * vd);
+                ins[input++]->setInput(cp->getZ() * vd);
+                ins[input++]->setInput(2 * (vd) - 1.0);
 
             }
         }
+
+
     }
 
     virtual btVector4 getColor(CastResult res, btScalar d, float vDistance) {
-        double pd = (1.0 - (d/vDistance));
+        double pd = (1.0 - (d / vDistance));
         btCollisionObject* c = res.hitBody;
         float r, g, b;
-        
 
-        switch ((((long)c)^2347) % 5) {
+
+        switch ((((long) c)^2347) % 5) {
             case 0:
                 r = 1.0;
                 g = 0.5;

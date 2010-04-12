@@ -12,14 +12,19 @@
 
 class PanelBody : public BoxBody {
 public:
+    btQuaternion normal;
+    
     PanelBody(btVector3* _position, btVector3* _size) : BoxBody(_position, _size) {
-
+        normal = btQuaternion(0,0,0,0);
+        normal.setEulerZYX(0,0,0);
     }
 
-    virtual void preDraw() {
-        btQuaternion front(0,0,0,0);
-        front.setEulerZYX(0,0,0);
-        btQuaternion q = rb->getWorldTransform().getRotation().slerp(front, 0.1);
+    void setFront(btQuaternion& nextNormal) {
+        normal = nextNormal;
+    }
+
+    virtual void preDraw() {                
+        btQuaternion q = rb->getWorldTransform().getRotation().slerp(normal, 0.1);
         rb->getWorldTransform().setRotation(q);
 
         btVector3 groundProjection = rb->getWorldTransform().getOrigin();

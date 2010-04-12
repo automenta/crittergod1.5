@@ -14,9 +14,14 @@
 
 void runSim();
 void runBrainDemo();
+void runBrain2Demo();
 void runCritterLab();
 void runInteractionDemo();
 void runHumanoid();
+void runWidgets3D();
+void runSpiderLab();
+void runMultiSpiders();
+void runSpiderWithBrains();
 
 #endif	/* _RUNSIMS_H */
 

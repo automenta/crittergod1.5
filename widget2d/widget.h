@@ -83,10 +83,10 @@ class Widget
                     glColor4f(r, g, b, 0.9);
 
                     glBegin(GL_QUADS);
-                            glVertex2f(x, y);
-                            glVertex2f(x+w, y);
-                            glVertex2f(x+w, y+h);
-                            glVertex2f(x, y+h);
+                            glVertex3f(x, y, 0);
+                            glVertex3f(x+w, y, 0);
+                            glVertex3f(x+w, y+h, 0);
+                            glVertex3f(x, y+h, 0);
                     glEnd();
                 }
 

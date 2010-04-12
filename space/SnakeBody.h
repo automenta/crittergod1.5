@@ -215,7 +215,7 @@ public:
         joints[joint++] = cp;
         dyn->addConstraint(cp);
 
-        eyeRetina = new Retina(brain, space->dynamicsWorld, bodies[i+1], 32, 24, 7);
+        eyeRetina = new Retina(brain, space->dynamicsWorld, bodies[i+1], 32, 24, 0.25, 50.0);
 
         posHead = new NPosition(brain, 1);
         posTail = new NPosition(brain, 1);

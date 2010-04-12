@@ -64,6 +64,7 @@ public:
     btRigidBody* touchedBody;
 
     DefaultSpace(Audio* _audio) {
+        
         this->audio = _audio;
         initPhysics();
     }
@@ -76,13 +77,15 @@ public:
 
     virtual void addBody(AbstractBody* a);
     virtual void removeBody(AbstractBody* a);
-    virtual void addGround(double x, double y, double z);
+    virtual btRigidBody* addGround(float w, float h, float d, float x, float y, float z);
 
     virtual void clientMoveAndDisplay();
 
     virtual void draw();
 
     void process(btScalar deltaTime);
+
+    virtual void updateCamera(float dt);
     
     virtual void reshape(int w, int h);
 

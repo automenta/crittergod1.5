@@ -108,23 +108,21 @@ public:
 
     void initDefaults() {
         minPlasticityStrengthen = 1.01;
-        maxPlasticityStrengthen = 1.15;
-        minPlasticityWeaken = 0.85;
+        maxPlasticityStrengthen = 1.200;
+        minPlasticityWeaken = 0.800;
         maxPlasticityWeaken = 0.99;
 
 
         percentChanceConsistentSynapses = 0.10;
 
-        percentChancePlasticNeuron = 0.5;
+        percentChancePlasticNeuron = 0.75;
 
         percentChanceOutputNeuron = 0.25;
-
-
         percentChanceInputSynapse = 0.25;
 
-        minFiringThreshold = 0.75;
+        minFiringThreshold = 0.51;
 
-        maxFiringThreshold = 0.9;
+        maxFiringThreshold = 0.99;
 
     }
 

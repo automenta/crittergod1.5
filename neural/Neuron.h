@@ -205,10 +205,11 @@ public:
 		// do we spike/fire
 		if (potential <= -1.0f * firingThreshold) {
 			// reset neural potential
-			potential = 0.0f;
+			//potential = 0.0f;
+                        potential += firingThreshold;
 
 			// fire the neuron
-			nextOutput = -1;
+			nextOutput = -firingThreshold;
 
 			// PLASTICITY: if neuron & synapse fire together, the synapse strenghtens
 			if (isPlastic) {
@@ -239,10 +240,11 @@ public:
 		// do we spike/fire
 		if (potential >= +1.0f * firingThreshold) {
 			// reset neural potential
-			potential = 0.0f;
+			//potential = 0.0f;
+                        potential -= firingThreshold;
 
 			// fire the neuron
-			nextOutput = 1;
+			nextOutput = firingThreshold;
 
 			// PLASTICITY: if neuron & synapse fire together, the synapse strenghtens
 			if (isPlastic) {
@@ -319,8 +321,8 @@ public:
         ni->plasticityWeaken = plasticityWeaken;
 
         //maximum that a synapse can multiply a signal. 1.0 = conserved
-        ni->maxSynapseWeight = 0.99;
-        ni->minSynapseWeight = 0.01;
+        ni->maxSynapseWeight = 1.0;
+        ni->minSynapseWeight = 0.1;
 
         ni->potentialDecay = 0.995;
 

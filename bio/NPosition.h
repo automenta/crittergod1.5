@@ -24,8 +24,13 @@ public:
         if (derivatives > 1) derivatives = 1;
 
     }
+    void set(float f[]) {
+        btVector3 nextP(f[0], f[1], f[2]);
+        v = nextP - p;
+        p = nextP;
+    }
 
-    void set(btVector3 nextP, double distScale) {
+    void setSin(btVector3 nextP, double distScale) {
         nextP = btVector3(sin(nextP[0] * distScale), sin(nextP[1] * distScale), sin(nextP[2] * distScale));
         v = nextP - p;
         p = nextP;

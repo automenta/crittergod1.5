@@ -369,7 +369,9 @@ void runWidgets3D() {
     *(ds->getBackgroundColor()) = btVector3(0.2, 0.2, 0.2);
     //ds->addGround(50, 50, 5);
 
-    PanelBody* bc = new PanelBody(new btVector3(0, 0.5, 0.25), new btVector3(6, 4, 0.1));
+    double d = 0.4;
+
+    PanelBody* bc = new PanelBody(new btVector3(0, 0.5, 0.25), new btVector3(6, 4, d));
     {
         TextRect* ul = new TextRect("BL");
         ul->span(-0.5, -0.5, -0.2, -0.2);
@@ -391,12 +393,12 @@ void runWidgets3D() {
     ds->addBody(bc);
 
     for (int i = 0; i < 5; i++) {
-        PanelBody* bb = new PanelBody(new btVector3(0, 0, 1.0), new btVector3(2, 1, 0.1));
+        PanelBody* bb = new PanelBody(new btVector3(0, 0, 1.0), new btVector3(2, 1, d));
         bb->front()->push_back(new TextRect("!@#$%", 0.3, 0.3));
         ds->addBody(bb);
     }
 
-    PanelBody* ba = new PanelBody(new btVector3(0, 0, 0.5), new btVector3(3, 2, 0.1));
+    PanelBody* ba = new PanelBody(new btVector3(0, 0, 0.5), new btVector3(3, 2, d));
     {
         float d = 0.0;
 
@@ -418,8 +420,14 @@ void runWidgets3D() {
     }
     ds->addBody(ba);
 
-    TouchReactiveBox* trb = new TouchReactiveBox(new btVector3(-4, -4, -4), new btVector3(3, 3, 0.2));
+    TouchReactiveBox* trb = new TouchReactiveBox(new btVector3(-4, -4, -4), new btVector3(3, 3, d));
     ds->addBody(trb);
+
+    TouchReactiveBox* trb2 = new TouchReactiveBox(new btVector3(-4, -4, -4), new btVector3(3, 3, d));
+    btQuaternion forward;
+    forward.setEuler(-M_PI_2, 0, 0);
+    trb2->setFront(forward);
+    ds->addBody(trb2);
 
     //    {
     //        Humanoid* h = new Humanoid(btVector3(0, 8, 0));
@@ -485,13 +493,12 @@ void runSpiderLab() {
 
     ds->addGround(15, 1, 15, 0, -10, 0);
 
-    int numLegs = 3;
+    int numLegs = 6;
     vector<btScalar>* legLengths = new vector<btScalar> ();
-    legLengths->push_back(0.6);
-cd app    legLengths->push_back(0.3);
+    legLengths->push_back(0.5);
+    legLengths->push_back(0.5);
     legLengths->push_back(0.2);
-    legLengths->push_back(0.1);
-    SpiderBody2* spider = new SpiderBody2(numLegs, legLengths, btVector3(0, 10, 0));
+    SpiderBody2* spider = new SpiderBody2(numLegs, legLengths, btVector3(0, 10, 0), 48);
     ds->addBody(spider);
 
     for (unsigned l = 0; l < numLegs; l++) {
@@ -500,9 +507,9 @@ cd app    legLengths->push_back(0.3);
         panelName[5] = 'a' + l;
         ds->getFace()->addPanel(panelName, rp);
 
-        int w = 100;
+        int w = 56;
         rp->setSize(w, w);
-        rp->setPosition(w * l, 300);
+        rp->setPosition(w * l, 0);
     }
 
 
@@ -517,6 +524,132 @@ cd app    legLengths->push_back(0.3);
             ds->addBody(new BoxBody(new btVector3(x, 0.0, y), new btVector3(rx, ry, rz)));
         }
     }
+
+//    BrainInsPanel bip(spider->brain, 100);
+//    ds->getFace()->addPanel("brainIns", &bip);
+//    bip.setPosition(600, 600);
+//    bip.setSize(100, 600);
+
+    BrainOutsPanel bop(spider->brain, 10);
+    ds->getFace()->addPanel("brainOuts", &bop);
+    bop.setPosition(800, 600);
+    bop.setSize(100, 600);
+
+    runGLWindow(0, NULL, 1024, 800, VERSION, ds);
+
+    delete audio;
+
+}
+
+void runMultiSpiders() {
+    Audio* audio = new Audio();
+
+    DefaultSpace* ds = new DefaultSpace(audio);
+
+    ds->addGround(35, 1, 35, 0, -10, 0);
+
+    {
+        int numLegs = 3;
+        vector<btScalar>* legLengths = new vector<btScalar> ();
+        legLengths->push_back(0.6);
+        legLengths->push_back(0.4);
+        legLengths->push_back(0.4);
+        legLengths->push_back(0.4);
+        legLengths->push_back(0.2);
+        SpiderBody2* spider = new SpiderBody2(numLegs, legLengths, btVector3(0, 10, 0), 25);
+        ds->addBody(spider);
+        
+        for (unsigned l = 0; l < numLegs; l++) {
+            RetinaPanel* rp = new RetinaPanel(spider->legEye[l]);
+            string panelName = "retina_";
+            panelName[5] = 'a' + l;
+            ds->getFace()->addPanel(panelName, rp);
+
+            int w = 100;
+            rp->setSize(w, w);
+            rp->setPosition(w * l, 300);
+        }
+
+    }
+
+    {
+        int numLegs = 6;
+        vector<btScalar>* legLengths = new vector<btScalar> ();
+        legLengths->push_back(0.86);
+        legLengths->push_back(0.86);
+        SpiderBody2* spider = new SpiderBody2(numLegs, legLengths, btVector3(0, 10, 0), 25);
+        ds->addBody(spider);
+        
+        for (unsigned l = 0; l < numLegs; l++) {
+            RetinaPanel* rp = new RetinaPanel(spider->legEye[l]);
+            string panelName = "xretina_";
+            panelName[5] = 'a' + l;
+            ds->getFace()->addPanel(panelName, rp);
+
+            int w = 100;
+            rp->setSize(w, w);
+            rp->setPosition(w * l, 700);
+        }
+
+    }
+
+    //add rocks
+    float rw = 10;
+    float rh = 10;
+    float rx = 0.3;
+    float ry = 0.15;
+    float rz = 0.3;
+    for (float x = -rw; x < rw; x+=4.0) {
+        for (float y = -rh; y < rh; y+=4.0) {
+            ds->addBody(new BoxBody(new btVector3(x, 0.0, y), new btVector3(rx, ry, rz)));
+        }
+    }
+
+    runGLWindow(0, NULL, 1024, 800, VERSION, ds);
+
+    delete audio;
+
+}
+
+void runSpiderWithBrains() {
+    Audio* audio = new Audio();
+
+    DefaultSpace* ds = new DefaultSpace(audio);
+
+    ds->addGround(15, 1, 15, 0, -10, 0);
+
+    int numLegs = 4;
+    vector<btScalar>* legLengths = new vector<btScalar> ();
+    legLengths->push_back(0.6);
+    legLengths->push_back(0.5);
+    legLengths->push_back(0.2);
+    SpiderBody2* spider = new SpiderBody2(numLegs, legLengths, btVector3(0, 10, 0), 16);
+    ds->addBody(spider);
+
+    for (unsigned l = 0; l < numLegs; l++) {
+        RetinaPanel* rp = new RetinaPanel(spider->legEye[l]);
+        string panelName = "retina_";
+        panelName[5] = 'a' + l;
+        ds->getFace()->addPanel(panelName, rp);
+
+        int w = 56;
+        rp->setSize(w, w);
+        rp->setPosition(w * l, 0);
+    }
+
+    BrainPanel *bp = new BrainPanel(spider->brain);
+    ds->getFace()->addPanel("brainControl", bp);
+    bp->setPosition(15, 15);
+
+    FDBrainBody fdb(spider->brain, 25, 5, 25);
+    fdb.neuronSize = 0.2;
+    ds->addBody(&fdb);
+
+
+//    BrainInsPanel bip(spider->brain, 100);
+//    ds->getFace()->addPanel("brainIns", &bip);
+//    bip.setPosition(600, 600);
+//    bip.setSize(100, 600);
 
     BrainOutsPanel bop(spider->brain, 100);
     ds->getFace()->addPanel("brainOuts", &bop);

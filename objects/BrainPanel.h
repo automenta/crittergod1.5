@@ -47,13 +47,15 @@ public:
         setSize(150, 150);
         setPosition(25, 25);
 
-        ftSlider = new HSlider(&firingThreshold, 0, 1.0);
-        ftSlider->span(5, 5, 100, 25);
+        addText("ftLabel", 5, 10, "Firing Threshold");
+        ftSlider = new HSlider(&firingThreshold, 0, 1.5);
+        ftSlider->span(5, 25, 100, 55);
         ftSlider->setModel(this);
         addPanel("ft", ftSlider);
 
-        pdSlider = new HSlider(&potentialDecay, 0, 1.0);
-        pdSlider->span(5, 30, 100, 50);
+        addText("pdLabel", 5, 75, "Potential Decay");
+        pdSlider = new HSlider(&potentialDecay, 0, 1.5);
+        pdSlider->span(5, 105, 100, 135);
         pdSlider->setModel(this);
         addPanel("pd", pdSlider);
         
@@ -61,9 +63,11 @@ public:
     virtual void onChange(HSlider* s) {
 
         if (s == ftSlider) {
+            cout << "Firing Threshold: " << s->value() << "\n";
             setThresh(s->value());
         }
         else if (s == pdSlider) {
+            cout << "Potential Decay: " << s->value() << "\n";
             setPotentialDecay(s->value());
         }
                 
